@@ -1,4 +1,5 @@
-import cleanStack   from 'clean-stack';
+import cleanStack from 'clean-stack';
+import { bind }   from 'decko';
 
 const ERR_COLOR = 'red';
 // const ERR_COLOR = 'tomato';
@@ -115,22 +116,27 @@ class Logger {
     tagColorIdx = (tagColorIdx + 1) % TAG_COLORS.length;
   }
 
+  @bind
   error(headline: any, ...details: any[]): void {
     this.print(LogLevel.Error, headline, ...details);
   }
 
+  @bind
   warn(headline: any, ...details: any[]): void {
     this.print(LogLevel.Warn, headline, ...details);
   }
 
+  @bind
   info(headline: any, ...details: any[]): void {
     this.print(LogLevel.Info, headline, ...details);
   }
 
+  @bind
   debug(headline: any, ...details: any[]): void {
     this.print(LogLevel.Debug, headline, ...details);
   }
 
+  @bind
   private print(level: LogLevel, headline: any, ...details: any[]): void {
     if (window.__LOG_LEVEL__ < level) {
       return;

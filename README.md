@@ -34,6 +34,10 @@ logger.debug(/*...*/);
 Changelog & Roadmap
 -------------------
 
+### v0.2.1
+
+* Fix `Cannot read property 'print' of undefined` (by binding methods to class).
+
 ### v0.2.0
 
 * Also export `getLogger` besides default.

@@ -1,6 +1,6 @@
 {
   "name": "@whitetrefoil/log-utils",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Some browser console.log utilities inspired by debug",
   "keywords": [
     "log",
@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "clean-stack": "^2.2.0",
+    "decko": "^1.2.0",
     "extract-stack": "^2.0.0"
   },
   "peerDependencies": {},
