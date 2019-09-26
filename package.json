@@ -1,0 +1,92 @@
+{
+  "name": "@whitetrefoil/log-utils",
+  "version": "0.1.0",
+  "description": "Some browser console.log utilities inspired by debug",
+  "keywords": [
+    "log",
+    "console",
+    "debug"
+  ],
+  "main": "lib/common/main.js",
+  "module": "lib/esm/main.js",
+  "typings": "lib/types/main.d.ts",
+  "files": [
+    "lib",
+    "README.md",
+    "UNLICENSE"
+  ],
+  "scripts": {
+    "prepublishOnly": "node scripts/prepublish-checklist.js && npm run build",
+    "build": "rimraf lib && tsc && tsc -p tsconfig.common.json",
+    "publish": "echo \"Done publishing, don't forget to:\n  1. **dist-tag** your channel in npm.\n  2. bump version in package.json\nGood luck with the publish ;)\"",
+    "test": "jest --no-cache"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whitetrefoil/log-utils.git"
+  },
+  "author": "WhiteTrefoil <whitetrefoil@gmail.com>",
+  "license": "Unlicense",
+  "directories": {
+    "test": "tests"
+  },
+  "engines": {
+    "node": ">=10.16.3"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "clean-stack": "^2.2.0",
+    "extract-stack": "^2.0.0"
+  },
+  "peerDependencies": {},
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "jest": "^24.9.0",
+    "rimraf": "^3.0.0",
+    "ts-jest": "^24.1.0",
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.3"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{ts,js}",
+      "!**/*.d.ts"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/~.*"
+    ],
+    "coverageDirectory": "test_results",
+    "coverageReporters": [
+      "clover",
+      "lcov",
+      "text-summary"
+    ],
+    "globals": {
+      "ts-jest": {
+        "babelConfig": true,
+        "tsConfig": "tests/tsconfig.json"
+      }
+    },
+    "moduleFileExtensions": [
+      "tsx",
+      "ts",
+      "jsx",
+      "js",
+      "json"
+    ],
+    "moduleNameMapper": {},
+    "setupFiles": [],
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setup.ts"
+    ],
+    "testRegex": "/tests/.*\\.spec\\.[jt]sx?$",
+    "transform": {
+      ".tsx?": "ts-jest"
+    },
+    "preset": "ts-jest",
+    "testMatch": null
+  }
+}
