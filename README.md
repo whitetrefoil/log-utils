@@ -34,6 +34,10 @@ logger.debug(/*...*/);
 Changelog & Roadmap
 -------------------
 
+### v0.2.0
+
+* Also export `getLogger` besides default.
+
 ### v0.1.1
 
 * Fix build config.

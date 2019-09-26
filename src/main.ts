@@ -1,7 +1,7 @@
 // tslint:disable:ban-ts-ignore
 
 export let LogLevel: typeof import('./dev').LogLevel;
-let getLogger: typeof import('./dev').getLogger;
+export let getLogger: typeof import('./dev').getLogger;
 
 try {
 // @ts-ignore
