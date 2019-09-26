@@ -34,6 +34,10 @@ logger.debug(/*...*/);
 Changelog & Roadmap
 -------------------
 
+### v0.1.1
+
+* Fix build config.
+
 ### v0.1.0
 
 * Initial release.
