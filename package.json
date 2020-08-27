@@ -1,6 +1,6 @@
 {
   "name": "@whitetrefoil/log-utils",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Some browser console.log utilities inspired by debug",
   "keywords": [
     "log",

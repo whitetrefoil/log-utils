@@ -29,10 +29,16 @@ logger.warn(/*...*/);
 logger.info(/*...*/);
 logger.debug(/*...*/);
 
+// `getLogger` has a optional second argument, set to true to disable path sep normalization.
+const logger = getLogger(`i'm not a path \ don't touch the backslash`, true);
 ```
 
 Changelog & Roadmap
 -------------------
+
+### v0.3.0
+
+* Assume the log tag is a path, enables auto path sep normalization for windows by default.
 
 ### v0.2.1
 
