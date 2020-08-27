@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 
-import cleanStack      from 'clean-stack'
-import slash           from 'slash'
-import { isPrimitive } from 'utility-types'
+import cleanStack    from 'clean-stack'
+import { bind }      from 'decko'
+import slash         from 'slash'
+import { Primitive } from 'utility-types'
 
 const ERR_COLOR = 'red'
 // const ERR_COLOR = 'tomato';
@@ -34,7 +35,7 @@ const TAG_COLORS = [
   'crimson',
 ]
 
-const enum LogLevel {
+export enum LogLevel {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   Quiet = 0,
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -49,8 +50,8 @@ const enum LogLevel {
 
 declare global {
   interface Window {
-    __LOG_LEVEL__?: LogLevel
-    __LOG_EXPANDED__?: boolean
+    __LOG_LEVEL__: LogLevel
+    __LOG_EXPANDED__: boolean
   }
 }
 
@@ -74,6 +75,10 @@ if (window.__LOG_LEVEL__ == null) {
   window.__LOG_EXPANDED__ = false
 }
 
+
+function isPrimitive(val: unknown): val is Primitive {
+  return typeof val !== 'object' || val === null
+}
 
 function extractStack(err: Error): string {
   if (err.stack == null) {
@@ -124,20 +129,37 @@ function format(...lines: unknown[]): string[] {
 let tagColorIdx = 0
 
 
-interface Logger {
-  error: (headline: unknown, ...details: unknown[]) => void
-  warn: (headline: unknown, ...details: unknown[]) => void
-  info: (headline: unknown, ...details: unknown[]) => void
-  debug: (headline: unknown, ...details: unknown[]) => void
-}
+class Logger {
+  readonly #tagColor: string
 
+  constructor(public tag: string) {
+    this.#tagColor = TAG_COLORS[tagColorIdx]
+    tagColorIdx = (tagColorIdx + 1) % TAG_COLORS.length
+  }
 
-const createLogger = (tag: string): Logger => {
-  const tagColor = TAG_COLORS[tagColorIdx]
-  tagColorIdx = (tagColorIdx + 1) % TAG_COLORS.length
+  @bind
+  error(headline: unknown, ...details: unknown[]): void {
+    this.print(LogLevel.Error, headline, ...details)
+  }
 
-  const print = (level: LogLevel, headline: unknown, ...details: unknown[]) => {
-    if ((window.__LOG_LEVEL__ ?? -1) < level) {
+  @bind
+  warn(headline: unknown, ...details: unknown[]): void {
+    this.print(LogLevel.Warn, headline, ...details)
+  }
+
+  @bind
+  info(headline: unknown, ...details: unknown[]): void {
+    this.print(LogLevel.Info, headline, ...details)
+  }
+
+  @bind
+  debug(headline: unknown, ...details: unknown[]): void {
+    this.print(LogLevel.Debug, headline, ...details)
+  }
+
+  @bind
+  private print(level: LogLevel, headline: unknown, ...details: unknown[]): void {
+    if (window.__LOG_LEVEL__ < level) {
       return
     }
     const def = LevelDefs[level]
@@ -148,75 +170,44 @@ const createLogger = (tag: string): Logger => {
     const formatted = format(headline, ...details)
     if (formatted.length === 0) {
       fn(
-        `%c ${label} %c ${tag} %c <EMPTY>`,
+        `%c ${label} %c ${this.tag} %c <EMPTY>`,
         `color:white;background-color:${color}`,
-        `font-weight:normal;color:${tagColor}`,
+        `font-weight:normal;color:${this.#tagColor}`,
         'font-weight:normal;color:reset',
       )
       return
     }
     if (formatted.length === 1) {
       fn(
-        `%c ${label} %c ${tag} %c ${formatted[0]}`,
+        `%c ${label} %c ${this.tag} %c ${formatted[0]}`,
         `color:white;background-color:${color}`,
-        `font-weight:normal;color:${tagColor}`,
+        `font-weight:normal;color:${this.#tagColor}`,
         'font-weight:normal;color:reset',
       )
       return
     }
     formatted.forEach((l, i) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       i === 0
         ? (window.__LOG_EXPANDED__ ? console.group : console.groupCollapsed)(
-        `%c ${label} %c ${tag} %c ${l}`,
+        `%c ${label} %c ${this.tag} %c ${l}`,
         `color:white;background-color:${color}`,
-        `font-weight:normal;color:${tagColor}`,
+        `font-weight:normal;color:${this.#tagColor}`,
         'font-weight:normal;color:reset',
         )
         : fn(l)
     })
     console.groupEnd()
   }
-
-  return {
-    error(headline: unknown, ...details: unknown[]): void {
-      print(LogLevel.Error, headline, ...details)
-    },
-    warn(headline: unknown, ...details: unknown[]): void {
-      print(LogLevel.Warn, headline, ...details)
-    },
-    info(headline: unknown, ...details: unknown[]): void {
-      print(LogLevel.Info, headline, ...details)
-    },
-    debug(headline: unknown, ...details: unknown[]): void {
-      print(LogLevel.Debug, headline, ...details)
-    },
-  }
 }
-
-const createMockLogger = (): Logger => ({
-  error: noop,
-  warn : noop,
-  info : noop,
-  debug: noop,
-})
-
 
 /**
  * @param tag - Tag in console
  * @param noPathConv - Convert path sep to slash
  */
-function getLogger(tag: string, noPathConv = false): Logger {
-  if (process.env.NODE_ENV === 'production') {
-    return createMockLogger()
-  }
+export function getLogger(tag: string, noPathConv = false): Logger {
   if (noPathConv === true) {
-    return createLogger(tag)
+    return new Logger(tag)
   }
   const posixTag = slash(tag)
-  return createLogger(posixTag)
+  return new Logger(posixTag)
 }
-
-
-export default getLogger
-export { LogLevel, getLogger }

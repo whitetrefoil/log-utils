@@ -1,12 +1,9 @@
 {
   "extends"        : "./tsconfig.json",
   "compilerOptions": {
-    "outDir"          : "lib/common",
-    "declaration"     : false,
-    "declarationDir"  : null,
-    "target"          : "es5",
-    "lib"             : ["esnext", "dom", "dom.iterable"],
-    "module"          : "commonjs",
-    "moduleResolution": "node"
+    "outDir"        : "lib/common",
+    "declaration"   : false,
+    "declarationDir": null,
+    "module"        : "commonjs"
   }
 }
