@@ -34,7 +34,7 @@ const TAG_COLORS = [
   'crimson',
 ]
 
-const enum LogLevel {
+enum LogLevel {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   Quiet = 0,
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -167,7 +167,7 @@ const createLogger = (tag: string): Logger => {
     formatted.forEach((l, i) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       i === 0
-        ? (window.__LOG_EXPANDED__ ? console.group : console.groupCollapsed)(
+        ? (window.__LOG_EXPANDED__ ?? false ? console.group : console.groupCollapsed)(
         `%c ${label} %c ${tag} %c ${l}`,
         `color:white;background-color:${color}`,
         `font-weight:normal;color:${tagColor}`,
