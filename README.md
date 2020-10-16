@@ -36,6 +36,10 @@ const logger = getLogger(`i'm not a path \ don't touch the backslash`, true);
 Changelog & Roadmap
 -------------------
 
+### v0.2.2
+
+* Upgrade infrastructure.
+
 ### v0.3.1
 
 * Fix missing LogLevel export.
@@ -43,10 +47,6 @@ Changelog & Roadmap
 ### v0.3.0
 
 * Assume the log tag is a path, enables auto path sep normalization for windows by default.
-
-### v0.2.2
-
-* Upgrade infrastructure.
 
 ### v0.2.1
 
