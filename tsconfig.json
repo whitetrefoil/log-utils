@@ -1,20 +1,25 @@
 {
+  "compileOnSave"  : false,
   "compilerOptions": {
+    "allowJs"                       : true,
+    "baseUrl"                       : ".",
+    "declaration"                   : true,
+    "declarationDir"                : "lib",
     "emitDecoratorMetadata"         : true,
     "esModuleInterop"               : true,
     "experimentalDecorators"        : true,
-    "declaration"                   : true,
-    "declarationDir"                : "lib/types",
-    "inlineSources"                 : true,
-    "inlineSourceMap"               : false,
     "jsx"                           : "react",
-    "jsxFactory"                    : "h",
-    "lib"                           : ["esnext", "dom", "dom.iterable"],
+    "importsNotUsedAsValues"        : "error",
+    "inlineSourceMap"               : false,
+    "inlineSources"                 : false,
+    "lib"                           : ["esnext", "dom"],
     "module"                        : "esnext",
     "moduleResolution"              : "node",
-    "outDir"                        : "lib/esm",
-    "pretty"                        : true,
-    "removeComments"                : false,
+    "outDir"                        : "lib",
+    "paths"                         : {
+      "~/*": ["./src/*"]
+    },
+    "skipDefaultLibCheck"           : true,
     "skipLibCheck"                  : true,
     "sourceMap"                     : true,
     "strict"                        : true,
@@ -25,5 +30,8 @@
     "src/**/*.ts",
     "src/**/*.js",
     "declarations/*.d.ts"
+  ],
+  "exclude"        : [
+    "**/node_modules/**"
   ]
 }

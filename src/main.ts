@@ -1,26 +1,24 @@
-// tslint:disable:ban-ts-ignore
+import * as dev             from './dev'
+import type { GetLoggerFn } from './interfaces'
+import * as prod            from './prod'
 
-export let LogLevel: typeof import('./dev').LogLevel;
-export let getLogger: typeof import('./dev').getLogger;
+type RealLogLevel = typeof import('./dev').LogLevel
+
+let getLogger: GetLoggerFn
+let LogLevel: RealLogLevel
 
 try {
-// @ts-ignore
-  if (process.env.NODE_ENV === 'development') {
-    // @ts-ignore
-    LogLevel = require('./dev').LogLevel;
-    // @ts-ignore
-    getLogger = require('./dev').getLogger;
-  } else {
-    // @ts-ignore
-    LogLevel = require('./prod').LogLevel;
-    // @ts-ignore
-    getLogger = require('./prod').getLogger;
-  }
-} catch (e) {
-  // @ts-ignore
-  LogLevel = require('./prod').LogLevel;
-  // @ts-ignore
-  getLogger = require('./prod').getLogger;
+  const pkg = process.env.NODE_ENV === 'development' ? dev : prod
+  getLogger = pkg.getLogger
+  LogLevel = pkg.LogLevel as RealLogLevel
+} catch (e: unknown) {
+  getLogger = prod.getLogger
+  LogLevel = prod.LogLevel as RealLogLevel
 }
 
-export default getLogger;
+export {
+  getLogger,
+  LogLevel,
+}
+
+export default getLogger

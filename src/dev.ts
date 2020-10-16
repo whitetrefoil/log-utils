@@ -1,25 +1,27 @@
-import cleanStack from 'clean-stack';
-import { bind }   from 'decko';
+import cleanStack             from 'clean-stack'
+import extractStack           from 'extract-stack'
+import type { LogFn, Logger } from './interfaces'
 
-const ERR_COLOR = 'red';
+
+const ERR_COLOR = 'red'
 // const ERR_COLOR = 'tomato';
 // const ERR_COLOR = 'firebrick';
 
 // const WARN_COLOR = 'goldenrod';
-const WARN_COLOR = 'darkgoldenrod';
+const WARN_COLOR = 'darkgoldenrod'
 // const WARN_COLOR = 'orange';
 
 // const INFO_COLOR = 'black';
 // const INFO_COLOR = 'darkgray';
 // const INFO_COLOR = 'dimgray';
 // const INFO_COLOR = 'gray';
-const INFO_COLOR = 'slategray';
+const INFO_COLOR = 'slategray'
 
 // const DEBUG_COLOR = 'blue';
 // const DEBUG_COLOR = 'darkcyan';
 // const DEBUG_COLOR = 'darkslateblue';
 // const DEBUG_COLOR = 'dodgerblue';
-const DEBUG_COLOR = 'royalblue';
+const DEBUG_COLOR = 'royalblue'
 
 
 const TAG_COLORS = [
@@ -29,7 +31,7 @@ const TAG_COLORS = [
   'dodgerblue',
   'darkorchid',
   'crimson',
-];
+]
 
 export enum LogLevel {
   Quiet = 0,
@@ -41,144 +43,112 @@ export enum LogLevel {
 
 declare global {
   interface Window {
-    __LOG_LEVEL__: LogLevel;
-    __LOG_EXPANDED__: boolean;
+    __LOG_LEVEL__: LogLevel
+    __LOG_EXPANDED__: boolean
   }
 }
 
-const noop = () => undefined;
+const noop = () => undefined
 
-type LevelDef = [Function, string, string];
+type LevelDef = [LogFn, string, string]
 const LevelDefs: LevelDef[] = [
   [noop, '', ''],
   [console.error, ERR_COLOR, 'ERR'],
   [console.warn, WARN_COLOR, 'WRN'],
   [console.log, INFO_COLOR, 'INF'],
   [console.log, DEBUG_COLOR, 'DEBUG'],
-];
+]
 
 
 if (window.__LOG_LEVEL__ == null) {
-  window.__LOG_LEVEL__ = 3;
-  window.__LOG_EXPANDED__ = false;
+  window.__LOG_LEVEL__ = 3
+  window.__LOG_EXPANDED__ = false
 }
 
-
-type Primitive = string|number|boolean|symbol|bigint|null|undefined;
-
-function isPrimitive(val: any): val is Primitive {
-  return typeof val !== 'object' || val === null;
+function getName(val: unknown): string {
+  return typeof (val as { name?: unknown }).name === 'string'
+    ? `${(val as { name: string }).name}:`
+    : 'Complex object:'
 }
 
-function extractStack(err: Error): string {
-  if (err.stack == null) {
-    return '';
-  }
-
-  const lines = err.stack.split('\n').map(l => l.trim());
-  if (lines[0] === err.toString()) {
-    lines.splice(0, 1);
-  }
-  return lines.join('\n');
-}
-
-function format(...lines: any[]): string[] {
-  const formatted: string[] = [];
+function format(...lines: unknown[]): string[] {
+  const formatted: string[] = []
 
   lines.forEach((l, i) => {
-    if (isPrimitive(l)) {
-      formatted.push(String(l));
+    if (l == null || typeof (l as { toString?: unknown }).toString !== 'function') {
+      formatted.push(String(l))
     } else if (l instanceof Error) {
-      formatted.push(String(l));
-      formatted.push(cleanStack(extractStack(l)));
-    } else if (l.toString !== Object.prototype.toString) {
-      formatted.push(l.toString());
+      formatted.push(String(l))
+      formatted.push(cleanStack(extractStack(l)))
+    } else if ((l as { toString?: unknown }).toString !== Object.prototype.toString) {
+      formatted.push((l as { toString: () => string }).toString())
     } else if (i === 0) {
-      formatted.push(l.name != null ? l.name : 'Complex object:');
-      formatted.push(JSON.stringify(l, null, 2));
+      formatted.push(getName(l))
+      formatted.push(JSON.stringify(l, null, 2))
     } else {
-      formatted.push(`${l.name != null ? l.name : 'Complex object:'}\n${JSON.stringify(l, null, 2)}`);
+      formatted.push(`${getName(l)}\n${JSON.stringify(l, null, 2)}`)
     }
-  });
+  })
 
-  return formatted;
+  return formatted
 }
 
 
-let tagColorIdx = 0;
-
-
-class Logger {
-  private tagColor: string;
-
-  constructor(public tag: string) {
-    this.tagColor = TAG_COLORS[tagColorIdx];
-    tagColorIdx = (tagColorIdx + 1) % TAG_COLORS.length;
+function print(tag: string, tagColor: string, level: LogLevel, headline: unknown, ...details: unknown[]): void {
+  if (window.__LOG_LEVEL__ < level) {
+    return
   }
-
-  @bind
-  error(headline: any, ...details: any[]): void {
-    this.print(LogLevel.Error, headline, ...details);
+  const def = LevelDefs[level]
+  if (def == null) {
+    return
   }
-
-  @bind
-  warn(headline: any, ...details: any[]): void {
-    this.print(LogLevel.Warn, headline, ...details);
+  const [fn, color, label] = def
+  const formatted = format(headline, ...details)
+  if (formatted.length === 0) {
+    fn(
+      `%c ${label} %c ${tag} %c <EMPTY>`,
+      `color:white;background-color:${color}`,
+      `font-weight:normal;color:${tagColor}`,
+      'font-weight:normal;color:reset',
+    )
+    return
   }
-
-  @bind
-  info(headline: any, ...details: any[]): void {
-    this.print(LogLevel.Info, headline, ...details);
+  if (formatted.length === 1) {
+    fn(
+      `%c ${label} %c ${tag} %c ${formatted[0]}`,
+      `color:white;background-color:${color}`,
+      `font-weight:normal;color:${tagColor}`,
+      'font-weight:normal;color:reset',
+    )
+    return
   }
-
-  @bind
-  debug(headline: any, ...details: any[]): void {
-    this.print(LogLevel.Debug, headline, ...details);
-  }
-
-  @bind
-  private print(level: LogLevel, headline: any, ...details: any[]): void {
-    if (window.__LOG_LEVEL__ < level) {
-      return;
+  formatted.forEach((l, i) => {
+    if (i !== 0) {
+      fn(l)
+      return
     }
-    const def = LevelDefs[level];
-    if (def == null) {
-      return;
-    }
-    const [fn, color, label] = def;
-    const formatted = format(headline, ...details);
-    if (formatted.length === 0) {
-      fn(
-        `%c ${label} %c ${this.tag} %c <EMPTY>`,
-        `color:white;background-color:${color}`,
-        `font-weight:normal;color:${this.tagColor}`,
-        'font-weight:normal;color:reset',
-      );
-      return;
-    }
-    if (formatted.length === 1) {
-      fn(
-        `%c ${label} %c ${this.tag} %c ${formatted[0]}`,
-        `color:white;background-color:${color}`,
-        `font-weight:normal;color:${this.tagColor}`,
-        'font-weight:normal;color:reset',
-      );
-      return;
-    }
-    formatted.forEach((l, i) => {
-      i === 0
-        ? (window.__LOG_EXPANDED__ ? console.group : console.groupCollapsed)(
-        `%c ${label} %c ${this.tag} %c ${l}`,
-        `color:white;background-color:${color}`,
-        `font-weight:normal;color:${this.tagColor}`,
-        'font-weight:normal;color:reset',
-        )
-        : fn(l);
-    });
-    console.groupEnd();
-  }
+    (window.__LOG_EXPANDED__ ? console.group : console.groupCollapsed)(
+      `%c ${label} %c ${tag} %c ${l}`,
+      `color:white;background-color:${color}`,
+      `font-weight:normal;color:${tagColor}`,
+      'font-weight:normal;color:reset',
+    )
+  })
+  console.groupEnd()
 }
+
+
+let tagColorIdx = 0
+
 
 export function getLogger(tag: string): Logger {
-  return new Logger(tag);
+  const tagColor = TAG_COLORS[tagColorIdx]
+  tagColorIdx = (tagColorIdx + 1) % TAG_COLORS.length
+
+  const error: LogFn = (headline, ...details) => void print(tag, tagColor, LogLevel.Error, headline, ...details)
+  const warn: LogFn = (headline, ...details) => void print(tag, tagColor, LogLevel.Warn, headline, ...details)
+  const info: LogFn = (headline, ...details) => void print(tag, tagColor, LogLevel.Info, headline, ...details)
+  const debug: LogFn = (headline, ...details) => void print(tag, tagColor, LogLevel.Debug, headline, ...details)
+
+  return { error, warn, info, debug }
 }
