@@ -10,9 +10,11 @@
       <option name="HEX_COLOR_LONG_FORMAT" value="true" />
     </CssCodeStyleSettings>
     <DB2CodeStyleSettings version="2">
-      <option name="KEYWORD_CASE" value="0" />
-      <option name="TYPE_CASE" value="0" />
-      <option name="QUOTE_IDENTIFIER" value="0" />
+      <option name="myVersion" value="2" />
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="TYPE_CASE" value="2" />
+      <option name="CUSTOM_TYPE_CASE" value="2" />
+      <option name="QUOTE_IDENTIFIER" value="2" />
       <option name="QUERY_SECTION_1ST_WORD_ALIGN" value="8" />
       <option name="INSERT_INTO_NL" value="2" />
       <option name="SET_EL_COMMA" value="1" />
@@ -36,9 +38,11 @@
       <option name="CORTEGE_CLOSING" value="1" />
     </DB2CodeStyleSettings>
     <DerbyCodeStyleSettings version="2">
-      <option name="KEYWORD_CASE" value="0" />
-      <option name="TYPE_CASE" value="0" />
-      <option name="QUOTE_IDENTIFIER" value="0" />
+      <option name="myVersion" value="2" />
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="TYPE_CASE" value="2" />
+      <option name="CUSTOM_TYPE_CASE" value="2" />
+      <option name="QUOTE_IDENTIFIER" value="2" />
       <option name="QUERY_SECTION_1ST_WORD_ALIGN" value="8" />
       <option name="INSERT_INTO_NL" value="2" />
       <option name="SET_EL_COMMA" value="1" />
@@ -67,9 +71,11 @@
       <option name="GROUP_STDLIB_IMPORTS" value="true" />
     </GoCodeStyleSettings>
     <H2CodeStyleSettings version="2">
-      <option name="KEYWORD_CASE" value="0" />
-      <option name="TYPE_CASE" value="0" />
-      <option name="QUOTE_IDENTIFIER" value="0" />
+      <option name="myVersion" value="2" />
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="TYPE_CASE" value="2" />
+      <option name="CUSTOM_TYPE_CASE" value="2" />
+      <option name="QUOTE_IDENTIFIER" value="2" />
       <option name="QUERY_SECTION_1ST_WORD_ALIGN" value="8" />
       <option name="INSERT_INTO_NL" value="2" />
       <option name="SET_EL_COMMA" value="1" />
@@ -91,9 +97,11 @@
       <option name="CORTEGE_CLOSING" value="1" />
     </H2CodeStyleSettings>
     <HSQLCodeStyleSettings version="2">
-      <option name="KEYWORD_CASE" value="0" />
-      <option name="TYPE_CASE" value="0" />
-      <option name="QUOTE_IDENTIFIER" value="0" />
+      <option name="myVersion" value="2" />
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="TYPE_CASE" value="2" />
+      <option name="CUSTOM_TYPE_CASE" value="2" />
+      <option name="QUOTE_IDENTIFIER" value="2" />
       <option name="QUERY_SECTION_1ST_WORD_ALIGN" value="8" />
       <option name="INSERT_INTO_NL" value="2" />
       <option name="SET_EL_COMMA" value="1" />
@@ -154,21 +162,14 @@
           <package name="tornadofx" alias="false" withSubpackages="false" />
         </value>
       </option>
-      <option name="PACKAGES_IMPORT_LAYOUT">
-        <value>
-          <package name="" alias="false" withSubpackages="true" />
-          <package name="java" alias="false" withSubpackages="true" />
-          <package name="javax" alias="false" withSubpackages="true" />
-          <package name="kotlin" alias="false" withSubpackages="true" />
-          <package name="" alias="true" withSubpackages="true" />
-        </value>
-      </option>
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>
     <MSSQLCodeStyleSettings version="2">
-      <option name="KEYWORD_CASE" value="0" />
-      <option name="TYPE_CASE" value="0" />
-      <option name="QUOTE_IDENTIFIER" value="0" />
+      <option name="myVersion" value="2" />
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="TYPE_CASE" value="2" />
+      <option name="CUSTOM_TYPE_CASE" value="2" />
+      <option name="QUOTE_IDENTIFIER" value="2" />
       <option name="QUERY_SECTION_1ST_WORD_ALIGN" value="8" />
       <option name="INSERT_INTO_NL" value="2" />
       <option name="SET_EL_COMMA" value="1" />
@@ -192,9 +193,11 @@
       <option name="CORTEGE_CLOSING" value="1" />
     </MSSQLCodeStyleSettings>
     <MySQLCodeStyleSettings version="2">
-      <option name="KEYWORD_CASE" value="0" />
-      <option name="TYPE_CASE" value="0" />
-      <option name="QUOTE_IDENTIFIER" value="0" />
+      <option name="myVersion" value="2" />
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="TYPE_CASE" value="2" />
+      <option name="CUSTOM_TYPE_CASE" value="2" />
+      <option name="QUOTE_IDENTIFIER" value="2" />
       <option name="QUERY_SECTION_1ST_WORD_ALIGN" value="8" />
       <option name="INSERT_INTO_NL" value="2" />
       <option name="SET_EL_COMMA" value="1" />
@@ -216,9 +219,11 @@
       <option name="CORTEGE_CLOSING" value="1" />
     </MySQLCodeStyleSettings>
     <OracleCodeStyleSettings version="2">
-      <option name="KEYWORD_CASE" value="0" />
-      <option name="TYPE_CASE" value="0" />
-      <option name="QUOTE_IDENTIFIER" value="0" />
+      <option name="myVersion" value="2" />
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="TYPE_CASE" value="2" />
+      <option name="CUSTOM_TYPE_CASE" value="2" />
+      <option name="QUOTE_IDENTIFIER" value="2" />
       <option name="QUERY_SECTION_1ST_WORD_ALIGN" value="8" />
       <option name="INSERT_INTO_NL" value="2" />
       <option name="SET_EL_COMMA" value="1" />
@@ -242,9 +247,11 @@
       <option name="CORTEGE_CLOSING" value="1" />
     </OracleCodeStyleSettings>
     <PostgresCodeStyleSettings version="2">
-      <option name="KEYWORD_CASE" value="0" />
-      <option name="TYPE_CASE" value="0" />
-      <option name="QUOTE_IDENTIFIER" value="0" />
+      <option name="myVersion" value="2" />
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="TYPE_CASE" value="2" />
+      <option name="CUSTOM_TYPE_CASE" value="2" />
+      <option name="QUOTE_IDENTIFIER" value="2" />
       <option name="QUERY_SECTION_1ST_WORD_ALIGN" value="8" />
       <option name="INSERT_INTO_NL" value="2" />
       <option name="SET_EL_COMMA" value="1" />
@@ -272,9 +279,11 @@
       <option name="OPTIMIZE_IMPORTS_JOIN_FROM_IMPORTS_WITH_SAME_SOURCE" value="true" />
     </Python>
     <SQLiteCodeStyleSettings version="2">
-      <option name="KEYWORD_CASE" value="0" />
-      <option name="TYPE_CASE" value="0" />
-      <option name="QUOTE_IDENTIFIER" value="0" />
+      <option name="myVersion" value="2" />
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="TYPE_CASE" value="2" />
+      <option name="CUSTOM_TYPE_CASE" value="2" />
+      <option name="QUOTE_IDENTIFIER" value="2" />
       <option name="QUERY_SECTION_1ST_WORD_ALIGN" value="8" />
       <option name="INSERT_INTO_NL" value="2" />
       <option name="SET_EL_COMMA" value="1" />
@@ -296,9 +305,11 @@
       <option name="CORTEGE_CLOSING" value="1" />
     </SQLiteCodeStyleSettings>
     <SqlCodeStyleSettings version="2">
-      <option name="KEYWORD_CASE" value="0" />
-      <option name="TYPE_CASE" value="0" />
-      <option name="QUOTE_IDENTIFIER" value="0" />
+      <option name="myVersion" value="2" />
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="TYPE_CASE" value="2" />
+      <option name="CUSTOM_TYPE_CASE" value="2" />
+      <option name="QUOTE_IDENTIFIER" value="2" />
       <option name="QUERY_SECTION_1ST_WORD_ALIGN" value="8" />
       <option name="INSERT_INTO_NL" value="2" />
       <option name="SET_EL_COMMA" value="1" />
@@ -327,9 +338,11 @@
       <option name="WRAP_PARENTHESIZED_EXPRESSION_INSIDE_VALUES" value="0" />
     </SqlCodeStyleSettings>
     <SybaseCodeStyleSettings version="2">
-      <option name="KEYWORD_CASE" value="0" />
-      <option name="TYPE_CASE" value="0" />
-      <option name="QUOTE_IDENTIFIER" value="0" />
+      <option name="myVersion" value="2" />
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="TYPE_CASE" value="2" />
+      <option name="CUSTOM_TYPE_CASE" value="2" />
+      <option name="QUOTE_IDENTIFIER" value="2" />
       <option name="QUERY_SECTION_1ST_WORD_ALIGN" value="8" />
       <option name="INSERT_INTO_NL" value="2" />
       <option name="SET_EL_COMMA" value="1" />
@@ -850,7 +863,6 @@
     </codeStyleSettings>
     <codeStyleSettings language="ruby">
       <option name="ALIGN_GROUP_FIELD_DECLARATIONS" value="true" />
-      <option name="SPACE_WITHIN_BRACES" value="true" />
     </codeStyleSettings>
   </code_scheme>
 </component>

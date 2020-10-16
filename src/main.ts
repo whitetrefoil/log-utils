@@ -1,8 +1,44 @@
 /* eslint-disable no-console */
 
-import cleanStack      from 'clean-stack'
-import slash           from 'slash'
-import { isPrimitive } from 'utility-types'
+import cleanStack   from 'clean-stack'
+import extractStack from 'extract-stack'
+import slash        from 'slash'
+
+
+// region - Interfaces & Type Aliases
+
+export type LogFn = (headline: unknown, ...details: unknown[]) => void
+
+export interface Logger {
+  error: LogFn
+  warn: LogFn
+  info: LogFn
+  debug: LogFn
+}
+
+export type GetLoggerFn = (tag: string) => Logger
+
+enum LogLevel {
+  Quiet = 0,
+  Error,
+  Warn,
+  Info,
+  Debug,
+}
+
+type LevelDef = [LogFn, string, string]
+
+declare global {
+  interface Window {
+    __LOG_LEVEL__?: LogLevel
+    __LOG_EXPANDED__?: boolean
+  }
+}
+
+// endregion
+
+
+// region - Predefined Colors
 
 const ERR_COLOR = 'red'
 // const ERR_COLOR = 'tomato';
@@ -34,31 +70,91 @@ const TAG_COLORS = [
   'crimson',
 ]
 
-enum LogLevel {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  Quiet = 0,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  Error,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  Warn,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  Info,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  Debug,
-}
+// endregion
 
-declare global {
-  interface Window {
-    __LOG_LEVEL__?: LogLevel
-    __LOG_EXPANDED__?: boolean
-  }
-}
+
+// region - Utilities
 
 const noop = () => undefined
 
-type ConsoleFunc = (...data: any[]) => void
+function getName(val: unknown): string {
+  return typeof (val as { name?: unknown }).name === 'string'
+    ? `${(val as { name: string }).name}:`
+    : 'Complex object:'
+}
 
-type LevelDef = [ConsoleFunc, string, string]
+
+function format(...lines: unknown[]): string[] {
+  const formatted: string[] = []
+
+  lines.forEach((line, i) => {
+    if (line == null || typeof (line as { toString?: unknown }).toString !== 'function') {
+      formatted.push(String(line))
+    } else if (line instanceof Error) {
+      formatted.push(String(line))
+      formatted.push(cleanStack(extractStack(line)))
+    } else if ((line as { toString?: unknown }).toString !== Object.prototype.toString) {
+      // If object has its own "toString" definition
+      formatted.push((line as { toString: () => string }).toString())
+    } else if (i === 0) {
+      formatted.push(getName(line))
+      formatted.push(JSON.stringify(line, null, 2))
+    } else {
+      formatted.push(`${getName(line)}\n${JSON.stringify(line, null, 2)}`)
+    }
+  })
+
+  return formatted
+}
+
+
+function print(tag: string, tagColor: string, level: LogLevel, headline: unknown, ...details: unknown[]): void {
+  if ((window.__LOG_LEVEL__ ?? -1) < level) {
+    return
+  }
+  const def = LevelDefs[level]
+  if (def == null) {
+    return
+  }
+  const [fn, color, label] = def
+  const formatted = format(headline, ...details)
+  if (formatted.length === 0) {
+    fn(
+      `%c ${label} %c ${tag} %c <EMPTY>`,
+      `color:white;background-color:${color}`,
+      `font-weight:normal;color:${tagColor}`,
+      'font-weight:normal;color:reset',
+    )
+    return
+  }
+  if (formatted.length === 1) {
+    fn(
+      `%c ${label} %c ${tag} %c ${formatted[0]}`,
+      `color:white;background-color:${color}`,
+      `font-weight:normal;color:${tagColor}`,
+      'font-weight:normal;color:reset',
+    )
+    return
+  }
+  formatted.forEach((l, i) => {
+    if (i !== 0) {
+      fn(l)
+      return
+    }
+    (window.__LOG_EXPANDED__ ? console.group : console.groupCollapsed)(
+      `%c ${label} %c ${tag} %c ${l}`,
+      `color:white;background-color:${color}`,
+      `font-weight:normal;color:${tagColor}`,
+      'font-weight:normal;color:reset',
+    )
+  })
+  console.groupEnd()
+}
+
+// endregion
+
+
+// region - Initialization
 
 const LevelDefs: LevelDef[] = [
   [noop, '', ''],
@@ -74,124 +170,21 @@ if (window.__LOG_LEVEL__ == null) {
   window.__LOG_EXPANDED__ = false
 }
 
-
-function extractStack(err: Error): string {
-  if (err.stack == null) {
-    return ''
-  }
-
-  const lines = err.stack.split('\n').map(l => l.trim())
-  if (lines[0] === err.message) {
-    lines.splice(0, 1)
-  }
-  return lines.join('\n')
-}
-
-function format(...lines: unknown[]): string[] {
-  const formatted: string[] = []
-
-  lines.forEach((line, i) => {
-    if (isPrimitive(line)) {
-      formatted.push(String(line))
-    } else if (line instanceof Error) {
-      formatted.push(String(line))
-      formatted.push(cleanStack(extractStack(line)))
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    } else if (
-      typeof (line as { toString?: unknown })?.toString === 'function' &&
-      (line as { toString?: unknown })?.toString !== Object.prototype.toString
-    ) {
-      // If object has its own "toString" definition
-      formatted.push((line as { toString: () => string }).toString())
-    } else {
-      const firstLine = typeof (line as { name?: unknown })?.name === 'string'
-        ? (line as { name: string }).name
-        : 'Complex object:'
-      const restLines = JSON.stringify(line, null, 2)
-      if (i === 0) {
-        formatted.push(firstLine)
-        formatted.push(restLines)
-      } else {
-        formatted.push(`${firstLine}\n${restLines}`)
-      }
-    }
-  })
-
-  return formatted
-}
-
-
 let tagColorIdx = 0
 
-
-interface Logger {
-  error: (headline: unknown, ...details: unknown[]) => void
-  warn: (headline: unknown, ...details: unknown[]) => void
-  info: (headline: unknown, ...details: unknown[]) => void
-  debug: (headline: unknown, ...details: unknown[]) => void
-}
+// endregion
 
 
 const createLogger = (tag: string): Logger => {
   const tagColor = TAG_COLORS[tagColorIdx]
   tagColorIdx = (tagColorIdx + 1) % TAG_COLORS.length
 
-  const print = (level: LogLevel, headline: unknown, ...details: unknown[]) => {
-    if ((window.__LOG_LEVEL__ ?? -1) < level) {
-      return
-    }
-    const def = LevelDefs[level]
-    if (def == null) {
-      return
-    }
-    const [fn, color, label] = def
-    const formatted = format(headline, ...details)
-    if (formatted.length === 0) {
-      fn(
-        `%c ${label} %c ${tag} %c <EMPTY>`,
-        `color:white;background-color:${color}`,
-        `font-weight:normal;color:${tagColor}`,
-        'font-weight:normal;color:reset',
-      )
-      return
-    }
-    if (formatted.length === 1) {
-      fn(
-        `%c ${label} %c ${tag} %c ${formatted[0]}`,
-        `color:white;background-color:${color}`,
-        `font-weight:normal;color:${tagColor}`,
-        'font-weight:normal;color:reset',
-      )
-      return
-    }
-    formatted.forEach((l, i) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      i === 0
-        ? (window.__LOG_EXPANDED__ ?? false ? console.group : console.groupCollapsed)(
-        `%c ${label} %c ${tag} %c ${l}`,
-        `color:white;background-color:${color}`,
-        `font-weight:normal;color:${tagColor}`,
-        'font-weight:normal;color:reset',
-        )
-        : fn(l)
-    })
-    console.groupEnd()
-  }
+  const error: LogFn = (headline, ...details) => void print(tag, tagColor, LogLevel.Error, headline, ...details)
+  const warn: LogFn = (headline, ...details) => void print(tag, tagColor, LogLevel.Warn, headline, ...details)
+  const info: LogFn = (headline, ...details) => void print(tag, tagColor, LogLevel.Info, headline, ...details)
+  const debug: LogFn = (headline, ...details) => void print(tag, tagColor, LogLevel.Debug, headline, ...details)
 
-  return {
-    error(headline: unknown, ...details: unknown[]): void {
-      print(LogLevel.Error, headline, ...details)
-    },
-    warn(headline: unknown, ...details: unknown[]): void {
-      print(LogLevel.Warn, headline, ...details)
-    },
-    info(headline: unknown, ...details: unknown[]): void {
-      print(LogLevel.Info, headline, ...details)
-    },
-    debug(headline: unknown, ...details: unknown[]): void {
-      print(LogLevel.Debug, headline, ...details)
-    },
-  }
+  return { error, warn, info, debug }
 }
 
 const createMockLogger = (): Logger => ({

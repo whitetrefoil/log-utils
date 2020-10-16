@@ -44,6 +44,10 @@ Changelog & Roadmap
 
 * Assume the log tag is a path, enables auto path sep normalization for windows by default.
 
+### v0.2.2
+
+* Upgrade infrastructure.
+
 ### v0.2.1
 
 * Fix `Cannot read property 'print' of undefined` (by binding methods to class).
