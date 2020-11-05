@@ -36,6 +36,10 @@ const logger = getLogger(`i'm not a path \ don't touch the backslash`, true);
 Changelog & Roadmap
 -------------------
 
+### v0.3.3
+
+* Fix crash when `window` is not defined.
+
 ### v0.3.2 / v0.2.2
 
 * Upgrade infrastructure.
