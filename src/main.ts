@@ -165,7 +165,7 @@ const LevelDefs: LevelDef[] = [
 ]
 
 
-if (window.__LOG_LEVEL__ == null) {
+if (typeof window !== 'undefined' && window.__LOG_LEVEL__ == null) {
   window.__LOG_LEVEL__ = 3
   window.__LOG_EXPANDED__ = false
 }
