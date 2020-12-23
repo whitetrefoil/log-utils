@@ -28,10 +28,13 @@ function askQuestionsResc() {
     // Next will invoke `npm run build` in `package.json`
   }
 
-  rl.question(`${questions[finishedQuestions]} (y/N)? `, (ans) => {
-    if (ans.toLowerCase() !== 'y') { return pleaseFix() }
+  rl.question(`${questions[finishedQuestions]} (y/N)? `, ans => {
+    if (ans.toLowerCase() !== 'y') {
+      return pleaseFix()
+    }
     finishedQuestions += 1
     askQuestionsResc()
+    return undefined
   })
 }
 

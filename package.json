@@ -20,10 +20,10 @@
   "typings": "lib/main.d.ts",
   "scripts": {
     "prepublishOnly": "node scripts/prepublish-checklist.js && npm run build",
-    "build": "rimraf lib && microbundle --raw",
+    "build": "rimraf lib && microbundle --raw --tsconfig src/tsconfig.json",
     "publish": "echo \"Done publishing, don't forget to:\n  1. **dist-tag** your channel in npm.\n  2. bump version in package.json\nGood luck with the publish ;)\"",
     "test": "eslint . && jest --no-cache",
-    "watch": "microbundle watch"
+    "watch": "microbundle watch --tsconfig src/tsconfig.json"
   },
   "repository": {
     "type": "git",

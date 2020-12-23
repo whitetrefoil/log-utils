@@ -68,7 +68,7 @@ const TAG_COLORS = [
   'dodgerblue',
   'darkorchid',
   'crimson',
-]
+] as const
 
 // endregion
 
@@ -84,8 +84,8 @@ function getName(val: unknown): string {
 }
 
 
-function format(...lines: unknown[]): string[] {
-  const formatted: string[] = []
+function format(...lines: unknown[]): unknown[] {
+  const formatted: unknown[] = []
 
   lines.forEach((line, i) => {
     if (line == null || typeof (line as { toString?: unknown }).toString !== 'function') {
@@ -98,9 +98,11 @@ function format(...lines: unknown[]): string[] {
       formatted.push((line as { toString: () => string }).toString())
     } else if (i === 0) {
       formatted.push(getName(line))
-      formatted.push(JSON.stringify(line, null, 2))
+      // formatted.push(JSON.stringify(line, null, 2))
+      formatted.push(line)
     } else {
-      formatted.push(`${getName(line)}\n${JSON.stringify(line, null, 2)}`)
+      // formatted.push(`${getName(line)}\n${JSON.stringify(line, null, 2)}`)
+      formatted.push(line)
     }
   })
 
@@ -141,7 +143,7 @@ function print(tag: string, tagColor: string, level: LogLevel, headline: unknown
       fn(l)
       return
     }
-    (window.__LOG_EXPANDED__ ? console.group : console.groupCollapsed)(
+    (window.__LOG_EXPANDED__ === true ? console.group : console.groupCollapsed)(
       `%c ${label} %c ${tag} %c ${l}`,
       `color:white;background-color:${color}`,
       `font-weight:normal;color:${tagColor}`,
@@ -176,13 +178,21 @@ let tagColorIdx = 0
 
 
 const createLogger = (tag: string): Logger => {
-  const tagColor = TAG_COLORS[tagColorIdx]
+  const tagColor = TAG_COLORS[tagColorIdx] ?? TAG_COLORS[0]
   tagColorIdx = (tagColorIdx + 1) % TAG_COLORS.length
 
-  const error: LogFn = (headline, ...details) => void print(tag, tagColor, LogLevel.Error, headline, ...details)
-  const warn: LogFn = (headline, ...details) => void print(tag, tagColor, LogLevel.Warn, headline, ...details)
-  const info: LogFn = (headline, ...details) => void print(tag, tagColor, LogLevel.Info, headline, ...details)
-  const debug: LogFn = (headline, ...details) => void print(tag, tagColor, LogLevel.Debug, headline, ...details)
+  const error: LogFn = (headline, ...details) => {
+    print(tag, tagColor, LogLevel.Error, headline, ...details)
+  }
+  const warn: LogFn = (headline, ...details) => {
+    print(tag, tagColor, LogLevel.Warn, headline, ...details)
+  }
+  const info: LogFn = (headline, ...details) => {
+    print(tag, tagColor, LogLevel.Info, headline, ...details)
+  }
+  const debug: LogFn = (headline, ...details) => {
+    print(tag, tagColor, LogLevel.Debug, headline, ...details)
+  }
 
   return { error, warn, info, debug }
 }

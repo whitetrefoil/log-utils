@@ -3,19 +3,27 @@
   "compilerOptions": {
     "allowJs"                       : true,
     "baseUrl"                       : ".",
-    "declaration"                   : true,
-    "declarationDir"                : "lib",
     "emitDecoratorMetadata"         : true,
     "esModuleInterop"               : true,
     "experimentalDecorators"        : true,
-    "jsx"                           : "react",
     "importsNotUsedAsValues"        : "error",
     "inlineSourceMap"               : false,
     "inlineSources"                 : false,
-    "lib"                           : ["esnext", "dom"],
-    "module"                        : "esnext",
+    "lib"                           : [
+      "ES5",
+      "ES2015",
+      "ES2016",
+      "ES2017",
+      "ES2018",
+      "ES2019",
+      "ES2020",
+      "ESNext"
+    ],
+    "module"                        : "commonjs",
     "moduleResolution"              : "node",
-    "outDir"                        : "lib",
+    "noImplicitReturns"             : true,
+    "noUncheckedIndexedAccess"      : true,
+    "outDir"                        : ".building",
     "paths"                         : {
       "~/*": ["./src/*"]
     },
@@ -24,14 +32,15 @@
     "sourceMap"                     : true,
     "strict"                        : true,
     "suppressImplicitAnyIndexErrors": true,
-    "target"                        : "esnext"
+    "target"                        : "es2018"
   },
   "include"        : [
-    "src/**/*.ts",
-    "src/**/*.js",
+    "scripts/**/*.js",
     "declarations/*.d.ts"
   ],
   "exclude"        : [
-    "**/node_modules/**"
+    "**/node_modules",
+    "**/.*",
+    "**/~*"
   ]
 }
