@@ -36,6 +36,11 @@ const logger = getLogger(`i'm not a path \ don't touch the backslash`, true);
 Changelog & Roadmap
 -------------------
 
+### v0.4.1
+
+* Fix README.
+* Update dependencies.
+
 ### v0.4.0
 
 * Don't use `JSON.stringify` when printing.
