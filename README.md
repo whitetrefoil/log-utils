@@ -1,4 +1,4 @@
-Unistore Hooks (@whitetrefoil/unistore-hooks)
+Log Utils (@whitetrefoil/log-utils)
 ==================================================
 
 Some browser console.log utilities inspired by debug.
