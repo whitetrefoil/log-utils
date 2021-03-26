@@ -1,8 +1,6 @@
 /* eslint-disable no-console */
 
-import cleanStack   from 'clean-stack'
-import extractStack from 'extract-stack'
-import slash        from 'slash'
+import slash from 'slash'
 import './flags'
 
 
@@ -88,8 +86,8 @@ function format(...lines: unknown[]): unknown[] {
     if (line == null || typeof (line as { toString?: unknown }).toString !== 'function') {
       formatted.push(String(line))
     } else if (line instanceof Error) {
-      formatted.push(String(line))
-      formatted.push(cleanStack(extractStack(line)))
+      formatted.push(line.message)
+      formatted.push(line)
     } else if ((line as { toString?: unknown }).toString !== Object.prototype.toString) {
       // If object has its own "toString" definition
       formatted.push((line as { toString: () => string }).toString())
