@@ -36,6 +36,10 @@ const logger = getLogger(`i'm not a path \ don't touch the backslash`, true);
 Changelog & Roadmap
 -------------------
 
+### v0.5.1
+
+* Fix missing `flags.d.ts` in lib dir.
+
 ### v0.5.0
 
 * Remove `extract-stack` & `clean-stack` for Firefox compatibility issue.
