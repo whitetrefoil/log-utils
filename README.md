@@ -36,6 +36,11 @@ const logger = getLogger(`i'm not a path \ don't touch the backslash`, true);
 Changelog & Roadmap
 -------------------
 
+### v0.5.0
+
+* Remove `extract-stack` & `clean-stack` for Firefox compatibility issue.
+* Update dependencies.
+
 ### v0.4.1
 
 * Fix README.
