@@ -3,6 +3,7 @@
 import cleanStack   from 'clean-stack'
 import extractStack from 'extract-stack'
 import slash        from 'slash'
+import './flags'
 
 
 // region - Interfaces & Type Aliases
@@ -27,13 +28,6 @@ enum LogLevel {
 }
 
 type LevelDef = [LogFn, string, string]
-
-declare global {
-  interface Window {
-    __LOG_LEVEL__?: LogLevel
-    __LOG_EXPANDED__?: boolean
-  }
-}
 
 // endregion
 
@@ -71,6 +65,9 @@ const TAG_COLORS = [
 ] as const
 
 // endregion
+
+
+const g = typeof window === 'undefined' ? global : window
 
 
 // region - Utilities
@@ -111,7 +108,7 @@ function format(...lines: unknown[]): unknown[] {
 
 
 function print(tag: string, tagColor: string, level: LogLevel, headline: unknown, ...details: unknown[]): void {
-  if ((window.__LOG_LEVEL__ ?? -1) < level) {
+  if ((g.__LOG_LEVEL__ ?? -1) < level) {
     return
   }
   const def = LevelDefs[level]
@@ -143,7 +140,7 @@ function print(tag: string, tagColor: string, level: LogLevel, headline: unknown
       fn(l)
       return
     }
-    (window.__LOG_EXPANDED__ === true ? console.group : console.groupCollapsed)(
+    (g.__LOG_EXPANDED__ === true ? console.group : console.groupCollapsed)(
       `%c ${label} %c ${tag} %c ${l}`,
       `color:white;background-color:${color}`,
       `font-weight:normal;color:${tagColor}`,
@@ -167,9 +164,9 @@ const LevelDefs: LevelDef[] = [
 ]
 
 
-if (typeof window !== 'undefined' && window.__LOG_LEVEL__ == null) {
-  window.__LOG_LEVEL__ = 3
-  window.__LOG_EXPANDED__ = false
+if (g.__LOG_LEVEL__ == null) {
+  g.__LOG_LEVEL__ = 3
+  g.__LOG_EXPANDED__ = false
 }
 
 let tagColorIdx = 0
