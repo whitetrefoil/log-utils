@@ -36,6 +36,10 @@ const logger = getLogger(`i'm not a path \ don't touch the backslash`, true);
 Changelog & Roadmap
 -------------------
 
+### v0.6.0
+
+* Upgrade infrastructure to support native ESM.
+
 ### v0.5.1
 
 * Fix missing `flags.d.ts` in lib dir.
