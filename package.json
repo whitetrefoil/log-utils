@@ -13,17 +13,22 @@
     "tests",
     "tsconfig*.json"
   ],
+  "type": "module",
   "source": "src/main.ts",
-  "main": "lib/main.js",
+  "main": "lib/main.cjs",
+  "exports": {
+    "import": "./lib/main.js",
+    "require": "./lib/main.cjs"
+  },
   "module": "lib/main.module.js",
-  "unpkg": "lib/main.umd.js",
+  "umd:main": "lib/main.umd.js",
   "typings": "lib/main.d.ts",
   "scripts": {
     "prepublishOnly": "node scripts/prepublish-checklist.js && npm run build",
-    "build": "rimraf lib && microbundle --raw --tsconfig src/tsconfig.json",
+    "build": "rimraf lib && microbundle --raw --no-pkg-main -o lib/main.cjs -f cjs && microbundle --raw --no-pkg-main -o lib/main.js -f modern && microbundle --raw --no-pkg-main -o lib/main.module.js -f es && microbundle --raw --no-pkg-main -o lib/main.umd.js -f umd",
     "publish": "echo \"Done publishing, don't forget to:\n  1. **dist-tag** your channel in npm.\n  2. bump version in package.json\nGood luck with the publish ;)\"",
     "test": "eslint . && jest --no-cache",
-    "watch": "microbundle watch --tsconfig src/tsconfig.json"
+    "watch": "microbundle watch --raw --no-pkg-main -o lib/main.js -f modern"
   },
   "repository": {
     "type": "git",
@@ -41,64 +46,27 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "slash": "^3.0.0"
+    "slash": "^4.0.0"
   },
   "peerDependencies": {},
   "devDependencies": {
-    "@types/jest": "^26.0.22",
-    "@types/node": "^14.14.36",
-    "@typescript-eslint/eslint-plugin": "^4.19.0",
-    "@typescript-eslint/parser": "^4.19.0",
-    "@whitetrefoil/eslint-config": "^0.18.1",
-    "eslint": "^7.22.0",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.0.2",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
+    "@whitetrefoil/eslint-config": "^0.20.1",
+    "eslint": "^7.25.0",
     "eslint-plugin-node": "^11.1.0",
     "jest": "^26.6.3",
+    "jest-environment-jsdom": "^26.6.2",
+    "jest-environment-jsdom-global": "^2.0.4",
+    "jest-junit": "^12.0.0",
+    "jest-localstorage-mock": "^2.4.10",
     "microbundle": "^0.13.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
-    "ts-jest": "^26.5.4",
-    "typescript": "^4.2.3"
-  },
-  "jest": {
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "src/**/*.{ts,js}",
-      "!**/*.d.ts"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/~.*"
-    ],
-    "coverageDirectory": "test_results/jest",
-    "coverageReporters": [
-      "clover",
-      "lcov",
-      "text-summary"
-    ],
-    "globals": {
-      "ts-jest": {
-        "babelConfig": false,
-        "tsConfig": "tests/tsconfig.json"
-      }
-    },
-    "moduleFileExtensions": [
-      "tsx",
-      "ts",
-      "jsx",
-      "js",
-      "json"
-    ],
-    "moduleNameMapper": {
-      "^~/(.*)$": "<rootDir>/src/$1"
-    },
-    "preset": "ts-jest",
-    "setupFiles": [],
-    "setupFilesAfterEnv": [
-      "<rootDir>/tests/setup.ts"
-    ],
-    "testMatch": null,
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$",
-    "transform": {
-      ".tsx?": "ts-jest"
-    }
+    "ts-jest": "^26.5.6",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
   }
 }

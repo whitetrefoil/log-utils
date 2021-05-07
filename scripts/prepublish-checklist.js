@@ -1,4 +1,4 @@
-const readline = require('readline')
+import readline from 'node:readline'
 
 console.log(`Preparing to publish version: ${process.env.npm_package_version}`)
 
@@ -24,7 +24,6 @@ function askQuestionsResc() {
     rl.close()
     console.log('Checklist is finished! Let\'s roll!')
     process.exit(0)
-    return
     // Next will invoke `npm run build` in `package.json`
   }
 

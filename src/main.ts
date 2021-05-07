@@ -126,7 +126,7 @@ function print(tag: string, tagColor: string, level: LogLevel, headline: unknown
   }
   if (formatted.length === 1) {
     fn(
-      `%c ${label} %c ${tag} %c ${formatted[0]}`,
+      `%c ${label} %c ${tag} %c ${String(formatted[0])}`,
       `color:white;background-color:${color}`,
       `font-weight:normal;color:${tagColor}`,
       'font-weight:normal;color:reset',
@@ -139,7 +139,7 @@ function print(tag: string, tagColor: string, level: LogLevel, headline: unknown
       return
     }
     (g.__LOG_EXPANDED__ === true ? console.group : console.groupCollapsed)(
-      `%c ${label} %c ${tag} %c ${l}`,
+      `%c ${label} %c ${tag} %c ${String(l)}`,
       `color:white;background-color:${color}`,
       `font-weight:normal;color:${tagColor}`,
       'font-weight:normal;color:reset',
@@ -216,5 +216,4 @@ function getLogger(tag: string, noPathConv = false): Logger {
 }
 
 
-export default getLogger
 export { LogLevel, getLogger }

@@ -1,10 +1,5 @@
 {
-  "extends"        : "../src/tsconfig.json",
-  "compilerOptions": {
-    "module": "commonjs",
-    "outDir": "../.building",
-    "target": "es2018"
-  },
+  "extends"        : "../tsconfig.json",
   "include"        : [
     "../declarations/**/*.d.ts",
     "../Gulpfile.js",
