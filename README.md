@@ -6,8 +6,7 @@ Some browser console.log utilities inspired by debug.
 Important
 ---------
 
-If your code isn't targeting the latest syntax spec of JS / ES,
-please use something like babel to transfer this library.
+This package is an ESM, cannot be used directly as a CJS module.
 
 Usage
 -----

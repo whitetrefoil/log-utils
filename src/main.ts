@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import slash from 'slash'
-import './flags'
+import './flags.js'
 
 
 // region - Interfaces & Type Aliases
@@ -18,11 +18,11 @@ export interface Logger {
 export type GetLoggerFn = (tag: string) => Logger
 
 enum LogLevel {
-  Quiet = 0,
-  Error,
-  Warn,
-  Info,
-  Debug,
+  QUIET = 0,
+  ERROR,
+  WARN,
+  INFO,
+  DEBUG,
 }
 
 type LevelDef = [LogFn, string, string]
@@ -177,16 +177,16 @@ const createLogger = (tag: string): Logger => {
   tagColorIdx = (tagColorIdx + 1) % TAG_COLORS.length
 
   const error: LogFn = (headline, ...details) => {
-    print(tag, tagColor, LogLevel.Error, headline, ...details)
+    print(tag, tagColor, LogLevel.ERROR, headline, ...details)
   }
   const warn: LogFn = (headline, ...details) => {
-    print(tag, tagColor, LogLevel.Warn, headline, ...details)
+    print(tag, tagColor, LogLevel.WARN, headline, ...details)
   }
   const info: LogFn = (headline, ...details) => {
-    print(tag, tagColor, LogLevel.Info, headline, ...details)
+    print(tag, tagColor, LogLevel.INFO, headline, ...details)
   }
   const debug: LogFn = (headline, ...details) => {
-    print(tag, tagColor, LogLevel.Debug, headline, ...details)
+    print(tag, tagColor, LogLevel.DEBUG, headline, ...details)
   }
 
   return { error, warn, info, debug }

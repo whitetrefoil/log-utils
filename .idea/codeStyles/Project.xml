@@ -9,7 +9,7 @@
       <option name="HEX_COLOR_UPPER_CASE" value="true" />
       <option name="HEX_COLOR_LONG_FORMAT" value="true" />
     </CssCodeStyleSettings>
-    <DB2CodeStyleSettings version="5">
+    <DB2CodeStyleSettings version="6">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="KEYWORD_CASE" value="2" />
       <option name="TYPE_CASE" value="2" />
@@ -37,7 +37,7 @@
       <option name="CORTEGE_COMMA_1ST" value="true" />
       <option name="CORTEGE_CLOSING" value="1" />
     </DB2CodeStyleSettings>
-    <DerbyCodeStyleSettings version="5">
+    <DerbyCodeStyleSettings version="6">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="KEYWORD_CASE" value="2" />
       <option name="TYPE_CASE" value="2" />
@@ -70,7 +70,7 @@
       <option name="MOVE_ALL_STDLIB_IMPORTS_IN_ONE_GROUP" value="true" />
       <option name="GROUP_STDLIB_IMPORTS" value="true" />
     </GoCodeStyleSettings>
-    <H2CodeStyleSettings version="5">
+    <H2CodeStyleSettings version="6">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="KEYWORD_CASE" value="2" />
       <option name="TYPE_CASE" value="2" />
@@ -96,7 +96,7 @@
       <option name="CORTEGE_COMMA_1ST" value="true" />
       <option name="CORTEGE_CLOSING" value="1" />
     </H2CodeStyleSettings>
-    <H2CodeStyleSettings version="5">
+    <H2CodeStyleSettings version="6">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="KEYWORD_CASE" value="2" />
       <option name="TYPE_CASE" value="2" />
@@ -122,7 +122,7 @@
       <option name="CORTEGE_COMMA_1ST" value="true" />
       <option name="CORTEGE_CLOSING" value="1" />
     </H2CodeStyleSettings>
-    <HSQLCodeStyleSettings version="5">
+    <HSQLCodeStyleSettings version="6">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="KEYWORD_CASE" value="2" />
       <option name="TYPE_CASE" value="2" />
@@ -190,7 +190,7 @@
       </option>
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>
-    <MSSQLCodeStyleSettings version="5">
+    <MSSQLCodeStyleSettings version="6">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="KEYWORD_CASE" value="2" />
       <option name="TYPE_CASE" value="2" />
@@ -218,7 +218,7 @@
       <option name="CORTEGE_COMMA_1ST" value="true" />
       <option name="CORTEGE_CLOSING" value="1" />
     </MSSQLCodeStyleSettings>
-    <MySQLCodeStyleSettings version="5">
+    <MySQLCodeStyleSettings version="6">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="KEYWORD_CASE" value="2" />
       <option name="TYPE_CASE" value="2" />
@@ -244,7 +244,7 @@
       <option name="CORTEGE_COMMA_1ST" value="true" />
       <option name="CORTEGE_CLOSING" value="1" />
     </MySQLCodeStyleSettings>
-    <OracleCodeStyleSettings version="5">
+    <OracleCodeStyleSettings version="6">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="KEYWORD_CASE" value="2" />
       <option name="TYPE_CASE" value="2" />
@@ -272,7 +272,7 @@
       <option name="CORTEGE_COMMA_1ST" value="true" />
       <option name="CORTEGE_CLOSING" value="1" />
     </OracleCodeStyleSettings>
-    <PostgresCodeStyleSettings version="5">
+    <PostgresCodeStyleSettings version="6">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="KEYWORD_CASE" value="2" />
       <option name="TYPE_CASE" value="2" />
@@ -304,7 +304,7 @@
       <option name="OPTIMIZE_IMPORTS_SORT_NAMES_IN_FROM_IMPORTS" value="true" />
       <option name="OPTIMIZE_IMPORTS_JOIN_FROM_IMPORTS_WITH_SAME_SOURCE" value="true" />
     </Python>
-    <SQLiteCodeStyleSettings version="5">
+    <SQLiteCodeStyleSettings version="6">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="KEYWORD_CASE" value="2" />
       <option name="TYPE_CASE" value="2" />
@@ -330,7 +330,7 @@
       <option name="CORTEGE_COMMA_1ST" value="true" />
       <option name="CORTEGE_CLOSING" value="1" />
     </SQLiteCodeStyleSettings>
-    <SqlCodeStyleSettings version="5">
+    <SqlCodeStyleSettings version="6">
       <option name="KEYWORD_CASE" value="2" />
       <option name="TYPE_CASE" value="2" />
       <option name="CUSTOM_TYPE_CASE" value="2" />
@@ -352,6 +352,8 @@
       <option name="TABLE_CONTENT" value="2" />
       <option name="TABLE_CLOSING" value="3" />
       <option name="POST_OPT_WRAP_1" value="true" />
+      <option name="SCRIPT_STMT_SEMICOLON_WRAP" value="1" />
+      <option name="SCRIPT_STMT_FOLLOWS_BLANK_LINE" value="1" />
       <option name="IMP_DECLARE_EL_WRAP" value="1" />
       <option name="IMP_IF_THEN_WRAP_THEN" value="true" />
       <option name="CORTEGE_COMMA_1ST" value="true" />
@@ -362,7 +364,7 @@
       <option name="WRAP_INSIDE_CALL_EXPRESSION" value="0" />
       <option name="WRAP_PARENTHESIZED_EXPRESSION_INSIDE_VALUES" value="0" />
     </SqlCodeStyleSettings>
-    <SybaseCodeStyleSettings version="5">
+    <SybaseCodeStyleSettings version="6">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="KEYWORD_CASE" value="2" />
       <option name="TYPE_CASE" value="2" />

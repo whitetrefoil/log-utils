@@ -1,10 +1,8 @@
 {
-  "extends"        : "../tsconfig.json",
+  "extends"        : "../src/tsconfig.json",
   "include"        : [
-    "../declarations/**/*.d.ts",
-    "../Gulpfile.js",
-    "../src/**/*.ts",
-    "**/*.tsx",
-    "**/*.ts"
+    "../declarations/**/*",
+    "../src/**/*",
+    "**/*"
   ]
 }
