@@ -35,6 +35,10 @@ const logger = getLogger(`i'm not a path \ don't touch the backslash`, true);
 Changelog & Roadmap
 -------------------
 
+### v0.7.1
+
+* Upgrade to typescript 3.7 & built to a real ESM.
+
 ### v0.6.0
 
 * Upgrade infrastructure to support native ESM.
