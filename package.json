@@ -1,6 +1,9 @@
 {
   "name": "@whitetrefoil/log-utils",
-  "version": "0.7.1",
+  "version": "0.8.0",
+  "type": "module",
+  "author": "WhiteTrefoil <whitetrefoil@gmail.com>",
+  "license": "Unlicense",
   "description": "Some browser console.log utilities inspired by debug",
   "keywords": [
     "log",
@@ -13,60 +16,39 @@
     "tests",
     "tsconfig.json"
   ],
-  "type": "module",
-  "source": "src/main.ts",
-  "types": "lib/main.d.ts",
-  "main": "lib/main.js",
   "exports": {
-    ".": {
-      "types": "./lib/main.d.ts",
-      "default": "./lib/main.js"
-    }
+    ".": "./lib/main.js"
   },
   "scripts": {
-    "build": "rimraf lib && microbundle --raw --no-pkg-main -f modern -o lib/main.js --tsconfig src/tsconfig.json",
-    "publish": "echo \"Done publishing, don't forget to:\n  1. **dist-tag** your channel in npm.\n  2. bump version in package.json\nGood luck with the publish ;)\"",
-    "test": "rimraf test_results && eslint . ; jest --no-cache",
-    "test-ci": "rimraf test_results && eslint -o test_results/eslint/junit.xml -f junit . ; jest -i --no-cache",
-    "watch": "microbundle watch --raw --no-pkg-main -f modern -o lib/main.js --tsconfig src/tsconfig.json"
+    "prepublishOnly": "yarn build",
+    "build": "rimraf lib && tsc -p src/tsconfig.json --noEmit false",
+    "test": "echo no test yet",
+    "watch": "rimraf lib && tsc -p src/tsconfig.json --noEmit false -w"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/whitetrefoil/log-utils.git"
   },
-  "author": "WhiteTrefoil <whitetrefoil@gmail.com>",
-  "license": "Unlicense",
-  "directories": {
-    "test": "tests"
-  },
   "engines": {
-    "node": ">=12.19.0"
+    "node": ">=20.9"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "slash": "^4.0.0"
+    "slash": "^5.1.0"
   },
   "devDependencies": {
-    "@types/jest": "^28.1.1",
-    "@types/node": "^17.0.42",
-    "@typescript-eslint/eslint-plugin": "^5.28.0",
-    "@typescript-eslint/parser": "^5.28.0",
-    "@whitetrefoil/eslint-config": "^0.27.0",
-    "eslint": "^8.17.0",
+    "@types/node": "^20.10.8",
+    "@typescript-eslint/eslint-plugin": "^6.18.1",
+    "@typescript-eslint/parser": "^6.18.1",
+    "@whitetrefoil/eslint-config": "^0.36.5",
+    "eslint": "^8.56.0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-node": "^11.1.0",
-    "jest": "^28.1.1",
-    "jest-environment-jsdom": "^28.1.1",
-    "jest-environment-jsdom-global": "^3.1.2",
-    "jest-junit": "^13.2.0",
-    "jest-localstorage-mock": "^2.4.21",
-    "microbundle": "^0.15.0",
     "npm-run-all": "^4.1.5",
-    "rimraf": "^3.0.2",
-    "ts-jest": "^28.0.5",
-    "ts-node": "^10.8.1",
-    "typescript": "^4.7.3"
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
   },
-  "packageManager": "yarn@3.2.1"
+  "packageManager": "yarn@4.0.2"
 }

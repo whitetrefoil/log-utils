@@ -1,21 +1,9 @@
 {
   "extends"        : "../tsconfig.json",
   "compilerOptions": {
-    "declaration"   : true,
-    "declarationDir": "../lib",
-    "noEmit"        : false,
-    "outDir"        : "../lib",
-    "paths"         : {
-      "~/*": ["./*"]
-    }
+    "outDir": "../lib"
   },
   "include"        : [
-    "../declarations/**/*",
-    "**/*"
-  ],
-  "exclude"        : [
-    "**/node_modules",
-    "**/.*",
-    "**/~*"
+    "**/*.ts"
   ]
 }
