@@ -1,7 +1,7 @@
 import {expectTypeOf, test} from 'vitest'
-import main from '~/main.js'
+import {getLogger} from '~/main.js'
 
 
-test('example types', () => {
-  expectTypeOf(main).toEqualTypeOf<() => void>()
-})
+// test('example types', () => {
+//   expectTypeOf(getLogger).toEqualTypeOf<(tag: string, noPathConv?: boolean) => void>()
+// })

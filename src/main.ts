@@ -1,212 +1,66 @@
+import * as loglevel from 'loglevel'
+import * as prefixPlugin from 'loglevel-plugin-prefix'
 import slash from 'slash'
 import './flags.js'
+import {colors} from './colors.js'
 
 
-// region - Interfaces & Type Aliases
+export type {LogLevelDesc, LogLevelNumbers, LogLevelNames, LogLevel} from 'loglevel'
 
-export type LogFn = (headline: unknown, ...details: unknown[]) => void
 
-export interface Logger {
-  error: LogFn
-  warn: LogFn
-  info: LogFn
-  debug: LogFn
+export interface SubLogger {
+  error: (...msg: any[]) => void
+  warn: (...msg: any[]) => void
+  info: (...msg: any[]) => void
+  debug: (...msg: any[]) => void
+  getLogger: (tag: string, noPathConv?: boolean) => SubLogger
 }
 
-export type GetLoggerFn = (tag: string) => Logger
-
-enum LogLevel {
-  QUIET = 0,
-  ERROR,
-  WARN,
-  INFO,
-  DEBUG,
-}
-
-type LevelDef = [LogFn, string, string]
-
-// endregion
-
-// region - Predefined Colors
-
-const ERR_COLOR = 'red'
-// const ERR_COLOR = 'tomato';
-// const ERR_COLOR = 'firebrick';
-
-// const WARN_COLOR = 'goldenrod';
-const WARN_COLOR = 'darkgoldenrod'
-// const WARN_COLOR = 'orange';
-
-// const INFO_COLOR = 'black';
-// const INFO_COLOR = 'darkgray';
-// const INFO_COLOR = 'dimgray';
-// const INFO_COLOR = 'gray';
-const INFO_COLOR = 'slategray'
-
-// const DEBUG_COLOR = 'blue';
-// const DEBUG_COLOR = 'darkcyan';
-// const DEBUG_COLOR = 'darkslateblue';
-// const DEBUG_COLOR = 'dodgerblue';
-const DEBUG_COLOR = 'royalblue'
-
-
-const TAG_COLORS = [
-  'lightseagreen',
-  'forestgreen',
-  'goldenrod',
-  'dodgerblue',
-  'darkorchid',
-  'crimson',
-] as const
-
-// endregion
-
-const g = typeof window === 'undefined' ? global : window
-
-const noop = () => undefined
-
-// region - Initialization
-
-const LevelDefs: LevelDef[] = [
-  [noop, '', ''],
-  [console.error, ERR_COLOR, 'ERR'],
-  [console.warn, WARN_COLOR, 'WRN'],
-  [console.log, INFO_COLOR, 'INF'],
-  [console.log, DEBUG_COLOR, 'DEBUG'],
-]
-
-
-if (g.__LOG_LEVEL__ == null) {
-  g.__LOG_LEVEL__ = 3
-  g.__LOG_EXPANDED__ = false
-}
 
 let tagColorIdx = 0
 
-// endregion
+prefixPlugin.reg(loglevel)
 
-// region - Utilities
+export function getLogger(tag: string, noPathConv = false): SubLogger {
+  const tagColorCount = Object.keys(colors.tag).length
+  const idx = tagColorIdx%tagColorCount
+  tagColorIdx += 1
 
-function getName(val: unknown): string {
-  return typeof (val as {name?: unknown}).name === 'string'
-    ? `${(val as {name: string}).name}:`
-    : 'Complex object:'
-}
+  const logger = loglevel.getLogger(noPathConv ? tag : slash(tag))
+  prefixPlugin.apply(logger, {
+    levelFormatter: lv => lv.toUpperCase(),
 
-
-function format(...lines: unknown[]): unknown[] {
-  const formatted: unknown[] = []
-
-  lines.forEach((line, i) => {
-    if (line == null || typeof (line as {toString?: unknown}).toString !== 'function') {
-      formatted.push(String(line))
-    } else if (line instanceof Error) {
-      formatted.push(line.message)
-      formatted.push(line)
-    } else if ((line as {toString?: unknown}).toString !== Object.prototype.toString) {
-      // If object has its own "toString" definition
-      formatted.push((line as {toString: () => string}).toString())
-    } else if (i === 0) {
-      formatted.push(getName(line))
-      // formatted.push(JSON.stringify(line, null, 2))
-      formatted.push(line)
-    } else {
-      // formatted.push(`${getName(line)}\n${JSON.stringify(line, null, 2)}`)
-      formatted.push(line)
-    }
+    format: (level, name, timestamp) => {
+      // @ts-expect-error - Official typing bug: https://github.com/kutuluk/loglevel-plugin-prefix/issues/17
+      const ts = timestamp as string
+      switch (level) {
+        case 'ERROR':
+          return `${colors.timestamp(`[${ts}]`)} ${colors.error(level)} ${colors.tag[idx]?.(`${name}:`)}`
+        case 'WARN':
+          return `${colors.timestamp(`[${ts}]`)} ${colors.warn(level)} ${colors.tag[idx]?.(`${name}:`)}`
+        case 'INFO':
+          return `${colors.timestamp(`[${ts}]`)} ${colors.info(level)} ${colors.tag[idx]?.(`${name}:`)}`
+        case 'DEBUG':
+          return `${colors.timestamp(`[${ts}]`)} ${colors.debug(level)} ${colors.tag[idx]?.(`${name}:`)}`
+      }
+      return undefined
+    },
   })
 
-  return formatted
+  return {
+    error    : logger.error.bind(logger),
+    warn     : logger.warn.bind(logger),
+    info     : logger.info.bind(logger),
+    debug    : logger.debug.bind(logger),
+    getLogger: (_tag: string, _noPathConv = noPathConv) => getLogger(`${tag}:${_tag}`, _noPathConv),
+  }
 }
 
-
-function print(tag: string, tagColor: string, level: LogLevel, headline: unknown, ...details: unknown[]): void {
-  if ((g.__LOG_LEVEL__ ?? -1) < level) {
-    return
-  }
-  const def = LevelDefs[level]
-  if (def == null) {
-    return
-  }
-  const [fn, color, label] = def
-  const formatted = format(headline, ...details)
-  if (formatted.length === 0) {
-    fn(
-      `%c ${label} %c ${tag} %c <EMPTY>`,
-      `color:white;background-color:${color}`,
-      `font-weight:normal;color:${tagColor}`,
-      'font-weight:normal;color:reset',
-    )
-    return
-  }
-  if (formatted.length === 1) {
-    fn(
-      `%c ${label} %c ${tag} %c ${String(formatted[0])}`,
-      `color:white;background-color:${color}`,
-      `font-weight:normal;color:${tagColor}`,
-      'font-weight:normal;color:reset',
-    )
-    return
-  }
-  formatted.forEach((l, i) => {
-    if (i !== 0) {
-      fn(l)
-      return
-    }
-    (g.__LOG_EXPANDED__ === true ? console.group : console.groupCollapsed)(
-      `%c ${label} %c ${tag} %c ${String(l)}`,
-      `color:white;background-color:${color}`,
-      `font-weight:normal;color:${tagColor}`,
-      'font-weight:normal;color:reset',
-    )
-  })
-  console.groupEnd()
+export function getLevel() {
+  return loglevel.getLevel()
 }
 
-// endregion
-
-const createLogger = (tag: string): Logger => {
-  const tagColor = TAG_COLORS[tagColorIdx] ?? TAG_COLORS[0]
-  tagColorIdx = (tagColorIdx+1)%TAG_COLORS.length
-
-  const error: LogFn = (headline, ...details) => {
-    print(tag, tagColor, LogLevel.ERROR, headline, ...details)
-  }
-  const warn: LogFn = (headline, ...details) => {
-    print(tag, tagColor, LogLevel.WARN, headline, ...details)
-  }
-  const info: LogFn = (headline, ...details) => {
-    print(tag, tagColor, LogLevel.INFO, headline, ...details)
-  }
-  const debug: LogFn = (headline, ...details) => {
-    print(tag, tagColor, LogLevel.DEBUG, headline, ...details)
-  }
-
-  return {error, warn, info, debug}
+export function setLevel(level: 'error'|'warn'|'info'|'debug', persist?: boolean) {
+  loglevel.setLevel(level, persist)
+  loglevel.rebuild()
 }
-
-const createMockLogger = (): Logger => ({
-  error: noop,
-  warn : noop,
-  info : noop,
-  debug: noop,
-})
-
-
-/**
- * @param tag - Tag in console
- * @param noPathConv - Convert path sep to slash
- */
-function getLogger(tag: string, noPathConv = false): Logger {
-  if (process.env.NODE_ENV === 'production') {
-    return createMockLogger()
-  }
-  if (noPathConv) {
-    return createLogger(tag)
-  }
-  const posixTag = slash(tag)
-  return createLogger(posixTag)
-}
-
-
-export {LogLevel, getLogger}
