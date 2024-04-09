@@ -35,6 +35,10 @@ const logger = getLogger(`i'm not a path \ don't touch the backslash`, true);
 Changelog & Roadmap
 -------------------
 
+### v0.9.0
+
+* Upgrade infra.
+
 ### v0.8.0
 
 * Upgrade to node 20 & latest infrastructure.

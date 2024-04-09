@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import slash from 'slash'
 import './flags.js'
 
@@ -28,7 +26,6 @@ enum LogLevel {
 type LevelDef = [LogFn, string, string]
 
 // endregion
-
 
 // region - Predefined Colors
 
@@ -64,17 +61,35 @@ const TAG_COLORS = [
 
 // endregion
 
-
 const g = typeof window === 'undefined' ? global : window
-
-
-// region - Utilities
 
 const noop = () => undefined
 
+// region - Initialization
+
+const LevelDefs: LevelDef[] = [
+  [noop, '', ''],
+  [console.error, ERR_COLOR, 'ERR'],
+  [console.warn, WARN_COLOR, 'WRN'],
+  [console.log, INFO_COLOR, 'INF'],
+  [console.log, DEBUG_COLOR, 'DEBUG'],
+]
+
+
+if (g.__LOG_LEVEL__ == null) {
+  g.__LOG_LEVEL__ = 3
+  g.__LOG_EXPANDED__ = false
+}
+
+let tagColorIdx = 0
+
+// endregion
+
+// region - Utilities
+
 function getName(val: unknown): string {
-  return typeof (val as { name?: unknown }).name === 'string'
-    ? `${(val as { name: string }).name}:`
+  return typeof (val as {name?: unknown}).name === 'string'
+    ? `${(val as {name: string}).name}:`
     : 'Complex object:'
 }
 
@@ -83,14 +98,14 @@ function format(...lines: unknown[]): unknown[] {
   const formatted: unknown[] = []
 
   lines.forEach((line, i) => {
-    if (line == null || typeof (line as { toString?: unknown }).toString !== 'function') {
+    if (line == null || typeof (line as {toString?: unknown}).toString !== 'function') {
       formatted.push(String(line))
     } else if (line instanceof Error) {
       formatted.push(line.message)
       formatted.push(line)
-    } else if ((line as { toString?: unknown }).toString !== Object.prototype.toString) {
+    } else if ((line as {toString?: unknown}).toString !== Object.prototype.toString) {
       // If object has its own "toString" definition
-      formatted.push((line as { toString: () => string }).toString())
+      formatted.push((line as {toString: () => string}).toString())
     } else if (i === 0) {
       formatted.push(getName(line))
       // formatted.push(JSON.stringify(line, null, 2))
@@ -150,31 +165,9 @@ function print(tag: string, tagColor: string, level: LogLevel, headline: unknown
 
 // endregion
 
-
-// region - Initialization
-
-const LevelDefs: LevelDef[] = [
-  [noop, '', ''],
-  [console.error, ERR_COLOR, 'ERR'],
-  [console.warn, WARN_COLOR, 'WRN'],
-  [console.log, INFO_COLOR, 'INF'],
-  [console.log, DEBUG_COLOR, 'DEBUG'],
-]
-
-
-if (g.__LOG_LEVEL__ == null) {
-  g.__LOG_LEVEL__ = 3
-  g.__LOG_EXPANDED__ = false
-}
-
-let tagColorIdx = 0
-
-// endregion
-
-
 const createLogger = (tag: string): Logger => {
   const tagColor = TAG_COLORS[tagColorIdx] ?? TAG_COLORS[0]
-  tagColorIdx = (tagColorIdx + 1) % TAG_COLORS.length
+  tagColorIdx = (tagColorIdx+1)%TAG_COLORS.length
 
   const error: LogFn = (headline, ...details) => {
     print(tag, tagColor, LogLevel.ERROR, headline, ...details)
@@ -189,7 +182,7 @@ const createLogger = (tag: string): Logger => {
     print(tag, tagColor, LogLevel.DEBUG, headline, ...details)
   }
 
-  return { error, warn, info, debug }
+  return {error, warn, info, debug}
 }
 
 const createMockLogger = (): Logger => ({
@@ -208,7 +201,7 @@ function getLogger(tag: string, noPathConv = false): Logger {
   if (process.env.NODE_ENV === 'production') {
     return createMockLogger()
   }
-  if (noPathConv === true) {
+  if (noPathConv) {
     return createLogger(tag)
   }
   const posixTag = slash(tag)
@@ -216,4 +209,4 @@ function getLogger(tag: string, noPathConv = false): Logger {
 }
 
 
-export { LogLevel, getLogger }
+export {LogLevel, getLogger}
