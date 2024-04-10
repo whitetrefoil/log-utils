@@ -1,7 +1,6 @@
 import * as loglevel from 'loglevel'
 import * as prefixPlugin from 'loglevel-plugin-prefix'
 import slash from 'slash'
-import './flags.js'
 import {colors} from './colors.js'
 
 
