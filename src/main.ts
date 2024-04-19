@@ -1,5 +1,5 @@
-import * as loglevel from 'loglevel'
-import * as prefixPlugin from 'loglevel-plugin-prefix'
+import loglevel from 'loglevel'
+import prefixPlugin from 'loglevel-plugin-prefix'
 import slash from 'slash'
 import {colors} from './colors.js'
 
