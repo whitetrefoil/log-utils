@@ -18,6 +18,7 @@
     ".": "./lib/main.js"
   },
   "scripts": {
+    "prepare": "echo 'This package must be published via Yarn, not NPM' && exit 1",
     "postinstall": "husky",
     "prepack": "pinst --disable; yarn build",
     "postpack": "pinst --enable",
