@@ -26,12 +26,14 @@ export function getLogger(tag: string, noPathConv = false): SubLogger {
   tagColorIdx += 1
 
   const logger = loglevel.getLogger(noPathConv ? tag : slash(tag))
+
   prefixPlugin.apply(logger, {
     levelFormatter: lv => lv.toUpperCase(),
 
     format: (level, name, timestamp) => {
       // @ts-expect-error - Official typing bug: https://github.com/kutuluk/loglevel-plugin-prefix/issues/17
       const ts = timestamp as string
+
       switch (level) {
         case 'ERROR':
           return `${colors.timestamp(`[${ts}]`)} ${colors.error(level)} ${colors.tag[idx]?.(`${name}:`)}`
@@ -42,6 +44,7 @@ export function getLogger(tag: string, noPathConv = false): SubLogger {
         case 'DEBUG':
           return `${colors.timestamp(`[${ts}]`)} ${colors.debug(level)} ${colors.tag[idx]?.(`${name}:`)}`
       }
+
       return undefined
     },
   })
