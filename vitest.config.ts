@@ -7,7 +7,7 @@ export default defineConfig({
   root: 'src',
 
   plugins: [
-    tsconfigPaths({}),
+    tsconfigPaths(),
   ],
 
   test: {
