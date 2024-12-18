@@ -12,16 +12,13 @@ Usage
 -----
 
 ```typescript
-import { getLogger, LogLevel } from '@whitetrefoil/log-utils';
+import { getLogger, setLevel } from '@whitetrefoil/log-utils';
 
-// Optional max level, default is LOG
-window.__LOG_LEVEL__ = LogLevel.Debug;
-
-// Optional, console.group OR console.groupCollapsed, default is collapsed
-window.__LOG_EXPANDED__ = true;
+// Optional max level
+setLevel('debug');
 
 // Give any tag like debug, personally I'd like to use the file path.
-const logger = getLogger(`/src/${__filename.split('?')[0]}`);
+const logger = getLogger('my-tag');
 
 logger.error(/*...*/);
 logger.warn(/*...*/);
@@ -29,11 +26,16 @@ logger.info(/*...*/);
 logger.debug(/*...*/);
 
 // `getLogger` has a optional second argument, set to true to disable path sep normalization.
-const logger = getLogger(`i'm not a path \ don't touch the backslash`, true);
+const logger2 = getLogger(`i'm not a path \ don't touch the backslash`, true);
 ```
 
 Changelog & Roadmap
 -------------------
+
+### v0.11.0
+
+* New infrastructure.
+* New interface.
 
 ### v0.9.0
 
