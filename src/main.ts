@@ -1,10 +1,5 @@
-import loglevel from 'loglevel'
-import prefixPlugin from 'loglevel-plugin-prefix'
 import slash from 'slash'
 import {colors} from './colors.js'
-
-
-export type {LogLevelDesc, LogLevelNumbers, LogLevelNames, LogLevel} from 'loglevel'
 
 
 export interface SubLogger {
