@@ -1,8 +1,10 @@
+import type {Debugger} from 'debug'
+import debug from 'debug'
 import type {WriteStream} from 'node:tty'
 import slash from 'slash'
 import timestamp from 'time-stamp'
 import {colors} from './colors.js'
-import {getGlobalLevel, type LogLevel, logLevels} from './level.js'
+import type {LogLevel} from './level.js'
 
 
 /** 全局的标签颜色索引计数器，新的 Logger 实例会使用当时的此数值作为其标签颜色索引值，并将此计数器加一 */
@@ -23,15 +25,12 @@ export class Logger {
   /** 标准输出流 */
   readonly stdout: WriteStream
 
+  #debugger: Debugger
+
 
   constructor(
     tag: string,
     config: {
-      /**
-       * 日志等级，如果不设置，则使用全局配置的日志等级
-       * @default undefined
-       */
-      level?: LogLevel|undefined
       /** 时间戳长度，0 为不显示，1 为只显示时间，2 为显示日期+时间 */
       timestamp?: 0|1|2
       /** 是否将标签中的路径自动转换为 Unix 格式 */
@@ -41,7 +40,6 @@ export class Logger {
     } = {},
   ) {
     this.tag = tag
-    this.level = config.level
     this.timestamp = config.timestamp ?? 1
     this.pathConv = config.pathConv ?? true
     this.stdout = config.stdout ?? process.stdout
@@ -49,6 +47,8 @@ export class Logger {
     const tagColorCount = Object.keys(colors.tag).length
     this.idx = tagColorIdx%tagColorCount
     tagColorIdx = (tagColorIdx+1)%tagColorCount
+
+    this.#debugger = debug(tag)
   }
 
   getTimestamp(): string {
@@ -75,7 +75,7 @@ export class Logger {
     const colorizedTag = colors.tag[this.idx]?.(`${tag}:`)
     if (colorizedTag != null) prefixFragments.push(colorizedTag)
 
-    return prefixFragments.join(' ')
+    return `${prefixFragments.join(' ')} `
   }
 
   print(...msg: unknown[]) {
@@ -87,40 +87,19 @@ export class Logger {
   }
 
   info(...msg: unknown[]) {
-    if (logLevels.indexOf(this.getLevel()) > 0) return
     this.print(this.getPrefix('info'), ...msg)
   }
 
   warn(...msg: unknown[]) {
-    if (logLevels.indexOf(this.getLevel()) > 1) return
     this.print(this.getPrefix('warn'), ...msg)
   }
 
   error(...msg: unknown[]) {
-    if (logLevels.indexOf(this.getLevel()) > 2) return
     this.print(this.getPrefix('error'), ...msg)
   }
 
-  debug(...msg: unknown[]) {
-    // TODO
-    throw new Error('not implemented')
-  }
-
-  setLevel(level: LogLevel|undefined) {
-    if (level !== undefined && !logLevels.includes(level)) {
-      throw new Error(`Invalid log level: ${level}`)
-    }
-
-    this.level = level
-  }
-
-  /**
-   * 获取当前 Logger 实际生效的日志等级，
-   * 如果当前实例没有设置自身的值的话会使用全局配置的日志等级，
-   * 如果全局也没有设置默认为 `warn`
-   */
-  getLevel() {
-    return this.level ?? getGlobalLevel() ?? 'warn'
+  debug(formatter: unknown, ...msg: unknown[]) {
+    this.#debugger(formatter, ...msg)
   }
 
   /** 基于当前 Logger 的配置创建一个新的 Logger 实例 */
@@ -141,11 +120,25 @@ export class Logger {
     } = {},
   ) {
     return new Logger(tag, {
-      level    : this.level,
       timestamp: this.timestamp,
       pathConv : this.pathConv,
       stdout   : this.stdout,
       ...config,
     })
   }
+}
+
+
+export function getLogger(
+  tag: string,
+  config: {
+    /** 时间戳长度，0 为不显示，1 为只显示时间，2 为显示日期+时间 */
+    timestamp?: 0|1|2
+    /** 是否将标签中的路径自动转换为 Unix 格式 */
+    pathConv?: boolean
+    /** 标准输出流 */
+    stdout?: WriteStream
+  } = {},
+) {
+  return new Logger(tag, config)
 }

@@ -1,6 +1,6 @@
-import {fileURLToPath} from 'node:url'
-import {defineConfig} from 'vitest/config'
+import path from 'node:path'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import {defineConfig} from 'vitest/config'
 
 
 export default defineConfig({
@@ -11,9 +11,9 @@ export default defineConfig({
   ],
 
   test: {
-    root: fileURLToPath(new URL('.', import.meta.url)),
+    root: import.meta.dirname,
 
-    alias: [{find: /^~\/(.*)/u, replacement: fileURLToPath(new URL('src/$1', import.meta.url))}],
+    alias: [{find: /^~\/(.*)/u, replacement: path.join(import.meta.dirname, 'src/$1')}],
 
     reporters: ['verbose', 'junit'],
 
@@ -22,6 +22,10 @@ export default defineConfig({
     },
 
     restoreMocks: true,
+
+    unstubEnvs  : true,
+
+    setupFiles: ['tests/setup.ts'],
 
     coverage: {
       enabled         : true,
