@@ -46,7 +46,6 @@
     "@eslint/js": "^9.24.0",
     "@stylistic/eslint-plugin": "^4.2.0",
     "@types/debug": "^4.1.12",
-    "@types/eslint__js": "^9",
     "@types/node": "^22.14.1",
     "@vitest/coverage-v8": "^3.1.1",
     "@whitetrefoil/eslint-config": "^8.0.0",
