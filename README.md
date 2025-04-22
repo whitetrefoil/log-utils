@@ -32,6 +32,11 @@ const logger2 = getLogger(`i'm not a path \ don't touch the backslash`, true);
 Changelog & Roadmap
 -------------------
 
+### v0.12.0
+
+* Remove log level filter.
+* Re-export `debug` package i.o. re-impl. it. 
+
 ### v0.11.0
 
 * New infrastructure.
