@@ -1,18 +1,7 @@
 import type {WriteStream} from 'node:tty'
 import stripAnsi from 'strip-ansi'
-import timestamp from 'time-stamp'
 import {describe, it, vi} from 'vitest'
-import {Logger} from '~/logger.js'
-
-
-it('getTimestamp', ({expect}) => {
-  const logger = new Logger('test')
-
-  const expected = timestamp('HH:mm:ss')
-  const actual = logger.getTimestamp()
-
-  expect(actual).toBe(expected)
-})
+import {getLogger} from '~/logger.js'
 
 
 describe('log', () => {
@@ -24,7 +13,7 @@ describe('log', () => {
     })
 
     const stdout = {write: mockWrite} as unknown as WriteStream
-    const logger = new Logger('test', {stdout})
+    const logger = getLogger('test', {stdout})
 
 
     logger.info('message')
@@ -53,14 +42,14 @@ describe('debug', () => {
     vi.stubEnv('DEBUG', '*')
     reloadDebug()
     const spyOnWrite = vi.spyOn(process.stderr, 'write')
-    const logger = new Logger('debug')
+    const logger = getLogger('debug')
     logger.debug('debug')
     expect(spyOnWrite).toHaveBeenCalled()
   })
 
   it('disabled', ({expect}) => {
     const spyOnWrite = vi.spyOn(process.stderr, 'write')
-    const logger = new Logger('debug')
+    const logger = getLogger('debug')
     logger.debug('debug')
     expect(spyOnWrite).not.toHaveBeenCalled()
   })
@@ -69,7 +58,7 @@ describe('debug', () => {
     vi.stubEnv('DEBUG', 'asdf')
     reloadDebug()
     const spyOnWrite = vi.spyOn(process.stderr, 'write')
-    const logger = new Logger('debug')
+    const logger = getLogger('debug')
     logger.debug('debug')
     expect(spyOnWrite).not.toHaveBeenCalled()
   })
