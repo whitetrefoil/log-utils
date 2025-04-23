@@ -32,6 +32,10 @@ const logger2 = getLogger(`i'm not a path \ don't touch the backslash`, true);
 Changelog & Roadmap
 -------------------
 
+### v0.13.0
+
+* Replace class to function to resolve binding issue.
+
 ### v0.12.0
 
 * Remove log level filter.
