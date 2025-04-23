@@ -4,4 +4,5 @@ export {colors} from './colors.js'
 export type {LogLevel} from './level.js'
 export {logLevels, isLogLevel} from './level.js'
 
-export {Logger, getLogger} from './logger.js'
+export type {Logger} from './logger.js'
+export {getLogger} from './logger.js'
