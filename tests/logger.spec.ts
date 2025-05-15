@@ -1,4 +1,3 @@
-import type {WriteStream} from 'node:tty'
 import stripAnsi from 'strip-ansi'
 import {describe, it, vi} from 'vitest'
 import {getLogger} from '~/logger.js'
@@ -12,20 +11,22 @@ describe('log', () => {
       printed += data
     })
 
-    const stdout = {write: mockWrite} as unknown as WriteStream
-    const logger = getLogger('test', {stdout})
+    const logFn = vi.fn((...msg: unknown[]) => {
+      printed += msg.join('')
+    })
 
+    const logger = getLogger('test', {logFn})
 
     logger.info('message')
-    expect(stripAnsi(printed)).toMatch(/^\[\d+:\d+:\d+\] INFO test: message\n$/u)
+    expect(stripAnsi(printed)).toMatch(/^\[\d+:\d+:\d+\] INFO test: message$/u)
     printed = ''
 
     logger.warn('warning')
-    expect(stripAnsi(printed)).toMatch(/^\[\d+:\d+:\d+\] WARN test: warning\n$/u)
+    expect(stripAnsi(printed)).toMatch(/^\[\d+:\d+:\d+\] WARN test: warning$/u)
     printed = ''
 
     logger.error('error')
-    expect(stripAnsi(printed)).toMatch(/^\[\d+:\d+:\d+\] ERROR test: error\n$/u)
+    expect(stripAnsi(printed)).toMatch(/^\[\d+:\d+:\d+\] ERROR test: error$/u)
     printed = ''
 
     logger.debug('debug')

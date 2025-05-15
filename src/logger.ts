@@ -1,5 +1,4 @@
 import getDebugger from 'debug'
-import type {WriteStream} from 'node:tty'
 import slash from 'slash'
 import ts from 'time-stamp'
 import {colors} from './colors.js'
@@ -15,8 +14,7 @@ interface LoggerConfig {
   timestamp?: 0|1|2
   /** 是否将标签中的路径自动转换为 Unix 格式 */
   pathConv?: boolean
-  /** 标准输出流 */
-  stdout?: WriteStream
+  logFn?: (...msg: unknown[]) => void
 }
 
 
@@ -29,8 +27,7 @@ export interface Logger {
   readonly timestamp: 0|1|2
   /** 是否将标签中的路径自动转换为 Unix 格式 */
   readonly pathConv: boolean
-  /** 标准输出流 */
-  readonly stdout: WriteStream
+  logFn?: (...msg: unknown[]) => void
 
   info: (...msg: unknown[]) => void
   warn: (...msg: unknown[]) => void
@@ -50,7 +47,11 @@ export function getLogger(
   tag: string,
   config: LoggerConfig = {},
 ): Logger {
-  const {timestamp = 1, pathConv = true, stdout = process.stdout} = config
+  const {
+    timestamp = 1,
+    pathConv = true,
+    logFn = console.log,
+  } = config
 
   const tagColorCount = Object.keys(colors.tag).length
   const idx = tagColorIdx%tagColorCount
@@ -86,11 +87,7 @@ export function getLogger(
   }
 
   const print = (...msg: unknown[]) => {
-    for (const m of msg) {
-      stdout.write(String(m))
-    }
-
-    stdout.write('\n')
+      logFn(...msg)
   }
 
   const info = (...msg: unknown[]) => {
@@ -106,14 +103,14 @@ export function getLogger(
   }
 
   // eslint-disable-next-line @typescript-eslint/no-shadow -- extend itself, so the name should be same
-  const extend = (tag: string, config: LoggerConfig = {}) => getLogger(tag, {timestamp, pathConv, stdout, ...config})
+  const extend = (tag: string, config: LoggerConfig = {}) => getLogger(tag, {timestamp, pathConv, logFn, ...config})
 
   return {
     tag,
     idx,
     timestamp,
     pathConv,
-    stdout,
+    logFn,
     debug,
     info,
     warn,
