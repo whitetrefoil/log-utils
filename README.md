@@ -32,6 +32,10 @@ const logger2 = getLogger(`i'm not a path \ don't touch the backslash`, true);
 Changelog & Roadmap
 -------------------
 
+### v0.14.0
+
+* use `console.log` to be compatible with both node and browser.
+
 ### v0.13.0
 
 * Replace class to function to resolve binding issue.
