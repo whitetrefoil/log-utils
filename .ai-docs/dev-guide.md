@@ -12,7 +12,7 @@
 ### `getLogger(tag: string, config?: LoggerConfig)`
 
 - Returns a tagged logger bound to `tag`.
-- `config` is an optional object with:
+- `config` is an optional `LoggerConfig` object (exported as a public type) with:
   - `timestamp`: `0 | 1 | 2` (default `1`). `0` disables the timestamp, `1` shows time only (`HH:mm:ss`), `2` shows date + time (`YYYY-MM-DD HH:mm:ss`).
   - `pathConv`: `boolean` (default `true`). When `true`, the tag is passed through `slash` to normalize path separators to Unix style.
   - `logFn`: `(...msg: unknown[]) => void` (default `console.log`). Function used to emit formatted messages for `info`, `warn`, and `error`.
@@ -29,6 +29,11 @@
 
 - `colors` is a `Colorify` instance with color helpers for `timestamp`, `error`, `warn`, `info`, `debug`, and a 6-entry `tag` tuple used for tag color cycling.
 - `Colorify` is the corresponding type, exported for consumers that want to build compatible color objects.
+
+### `LoggerConfig`
+
+- The exported config type accepted by `getLogger(tag, config?)` and `Logger.getLogger(tag, config?)`.
+- All fields are optional: `timestamp` (`0 | 1 | 2`, default `1`), `pathConv` (`boolean`, default `true`), `logFn` (`(...msg: unknown[]) => void`, default `console.log`).
 
 ## ESLint Constraints
 

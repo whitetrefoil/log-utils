@@ -9,7 +9,7 @@ import type {LogLevel} from './level.js'
 let tagColorIdx = 0
 
 
-interface LoggerConfig {
+export interface LoggerConfig {
   /** 时间戳长度，0 为不显示，1 为只显示时间，2 为显示日期+时间 */
   timestamp?: 0|1|2
   /** 是否将标签中的路径自动转换为 Unix 格式 */
@@ -27,7 +27,8 @@ export interface Logger {
   readonly timestamp: 0|1|2
   /** 是否将标签中的路径自动转换为 Unix 格式 */
   readonly pathConv: boolean
-  logFn?: (...msg: unknown[]) => void
+  /** 实际用于输出的函数，默认为 console.log */
+  logFn: (...msg: unknown[]) => void
 
   info: (...msg: unknown[]) => void
   warn: (...msg: unknown[]) => void

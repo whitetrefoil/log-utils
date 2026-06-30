@@ -17,8 +17,9 @@
 
 - Test files live in `tests/` and mirror the structure of `src/`.
 - Use `*.spec.ts` naming.
+- Current test files: `logger.spec.ts`, `level.spec.ts`, `colors.spec.ts`, `main.spec.ts`.
 - Keep tests deterministic; avoid relying on real `console.log` side effects unless explicitly testing output.
-- Prefer mocking `console.log` when verifying output behavior.
+- Prefer mocking `logFn` (via the `LoggerConfig` option) when verifying output behavior.
 
 ## Coverage
 
