@@ -83,6 +83,14 @@ export { getLogger } from '@whitetrefoil/log-utils';
 Changelog & Roadmap
 -------------------
 
+### v0.15.0
+
+* Export `LoggerConfig` type so consumers can type config objects explicitly.
+* Make `Logger.logFn` a required property (it was always defined at runtime).
+* Make `Logger.getLogger(tag, config?)` config parameter optional in the type, matching the runtime default.
+* Sync `AGENTS.md` and `.ai-docs/` to the actual public API (remove stale `setLevel` / `disableNormalization` / debug re-export references).
+* Expand test coverage: add `level.spec.ts`, `colors.spec.ts`, `main.spec.ts`; add config branch tests (timestamp 0/2, pathConv, child logger inheritance/override, logFn override); remove invalid mock from `logger.spec.ts`.
+
 ### v0.14.0
 
 * Use `console.log` to be compatible with both Node and browser.
