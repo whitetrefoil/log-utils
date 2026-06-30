@@ -10,6 +10,9 @@
       <excludeFolder url="file://$MODULE_DIR$/.yarn" />
       <excludeFolder url="file://$MODULE_DIR$/.tsimp" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/copilot/chatSessions" />
+      <excludeFolder url="file://$MODULE_DIR$/.ai-docs" />
+      <excludeFolder url="file://$MODULE_DIR$/.codegraph" />
+      <excludeFolder url="file://$MODULE_DIR$/.omo" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
