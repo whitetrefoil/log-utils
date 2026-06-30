@@ -1,29 +1,29 @@
 {
   "compileOnSave"  : false,
   "compilerOptions": {
-    "allowJs"                 : false,
-    "declaration"             : true,
-    "esModuleInterop"         : true,
-    "importHelpers"           : true,
-    "inlineSourceMap"         : false,
-    "inlineSources"           : false,
-    "module"                  : "NodeNext",
-    "moduleResolution"        : "NodeNext",
-    "noEmit"                  : true,
-    "noImplicitOverride"      : true,
-    "noImplicitReturns"       : true,
-    "noUncheckedIndexedAccess": true,
-    "resolveJsonModule"       : true,
-    "skipDefaultLibCheck"     : true,
-    "skipLibCheck"            : true,
-    "sourceMap"               : true,
-    "strict"                  : true,
-    "target"                  : "ESNext",
-    "verbatimModuleSyntax"    : true
+    "allowJs"                   : true,
+    "esModuleInterop"           : true,
+    "exactOptionalPropertyTypes": false,
+    "importHelpers"             : true,
+    "inlineSourceMap"           : false,
+    "inlineSources"             : false,
+    "module"                    : "NodeNext",
+    "moduleResolution"          : "NodeNext",
+    "noEmit"                    : true,
+    "noImplicitOverride"        : true,
+    "noImplicitReturns"         : true,
+    "noUncheckedIndexedAccess"  : true,
+    "resolveJsonModule"         : true,
+    "skipDefaultLibCheck"       : true,
+    "skipLibCheck"              : true,
+    "sourceMap"                 : true,
+    "strict"                    : true,
+    "target"                    : "ESNext",
+    "types"                     : ["node"],
+    "verbatimModuleSyntax"      : true
   },
   "include"        : [
-    "declarations/**/*",
-    "scripts/**/*",
-    "*"
+    "./declarations/**/*",
+    "./*"
   ]
 }

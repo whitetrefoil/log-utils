@@ -1,6 +1,6 @@
 import stripAnsi from 'strip-ansi'
 import {describe, it, vi} from 'vitest'
-import {getLogger} from '~/logger.js'
+import {getLogger} from '#/logger.js'
 
 
 describe('log', () => {
