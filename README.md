@@ -1,49 +1,100 @@
 Log Utils (@whitetrefoil/log-utils)
 ==================================================
 
-Some browser console.log utilities inspired by debug.
+A small ESM logging utility built on top of [`debug`](https://www.npmjs.com/package/debug) and `console.log`.
 
 Important
 ---------
 
-This package is an ESM, cannot be used directly as a CJS module.
+This package is **ESM only** and requires **Node.js `>= 24`**. It cannot be used directly as a CommonJS module.
+
+Installation
+------------
+
+```bash
+yarn add @whitetrefoil/log-utils
+```
 
 Usage
 -----
 
 ```typescript
-import { getLogger, setLevel } from '@whitetrefoil/log-utils';
+import { getLogger } from '@whitetrefoil/log-utils';
 
-// Optional max level
-setLevel('debug');
-
-// Give any tag like debug, personally I'd like to use the file path.
 const logger = getLogger('my-tag');
 
-logger.error(/*...*/);
-logger.warn(/*...*/);
-logger.info(/*...*/);
-logger.debug(/*...*/);
+logger.error('Something went wrong');
+logger.warn('This is a warning');
+logger.info('Hello world');
 
-// `getLogger` has a optional second argument, set to true to disable path sep normalization.
-const logger2 = getLogger(`i'm not a path \ don't touch the backslash`, true);
+// `logger.debug` is the underlying `debug` instance
+logger.debug('Formatted %s', 'message');
 ```
+
+By default the tag is treated as a path and normalized to Unix-style separators. Use `pathConv: false` to keep the tag as-is:
+
+```typescript
+const logger = getLogger(`i'm not a path \ don't touch the backslash`, { pathConv: false });
+```
+
+Logger Configuration
+--------------------
+
+`getLogger(tag, config?)` accepts an optional config object:
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `timestamp` | `0 \| 1 \| 2` | `1` | Timestamp length. `0` = none, `1` = time only, `2` = date + time. |
+| `pathConv` | `boolean` | `true` | Normalize tag path separators to Unix style. |
+| `logFn` | `(...msg: unknown[]) => void` | `console.log` | Function used to emit formatted messages. |
+
+Extending a Logger
+------------------
+
+Each logger has a `getLogger` method that creates a child logger inheriting the parent's config:
+
+```typescript
+const parent = getLogger('parent', { timestamp: 2 });
+const child = parent.getLogger('child'); // inherits timestamp: 2
+```
+
+Public API
+----------
+
+```typescript
+export type { Colorify } from '@whitetrefoil/log-utils';
+export { colors } from '@whitetrefoil/log-utils';
+
+export type { LogLevel } from '@whitetrefoil/log-utils';
+export { logLevels, isLogLevel } from '@whitetrefoil/log-utils';
+
+export type { Logger } from '@whitetrefoil/log-utils';
+export { getLogger } from '@whitetrefoil/log-utils';
+```
+
+- `Colorify` — type of the color helpers object.
+- `colors` — color helpers for timestamp, levels, and tag colors.
+- `LogLevel` — `'info' \| 'warn' \| 'error'`.
+- `logLevels` — array of valid log levels.
+- `isLogLevel(value)` — type guard for `LogLevel`.
+- `Logger` — interface returned by `getLogger`.
+- `getLogger(tag, config?)` — creates a tagged logger.
 
 Changelog & Roadmap
 -------------------
 
 ### v0.14.0
 
-* use `console.log` to be compatible with both node and browser.
+* Use `console.log` to be compatible with both Node and browser.
 
 ### v0.13.0
 
-* Replace class to function to resolve binding issue.
+* Replace class with function to resolve binding issue.
 
 ### v0.12.0
 
 * Remove log level filter.
-* Re-export `debug` package i.o. re-impl. it. 
+* Re-export `debug` package instead of re-implementing it.
 
 ### v0.11.0
 
@@ -52,15 +103,15 @@ Changelog & Roadmap
 
 ### v0.9.0
 
-* Upgrade infra.
+* Upgrade infrastructure.
 
 ### v0.8.0
 
-* Upgrade to node 20 & latest infrastructure.
+* Upgrade to Node 20 & latest infrastructure.
 
 ### v0.7.1
 
-* Upgrade to typescript 3.7 & built to a real ESM.
+* Upgrade to TypeScript 3.7 & built to a real ESM.
 
 ### v0.6.0
 
@@ -98,7 +149,7 @@ Changelog & Roadmap
 
 ### v0.3.0
 
-* Assume the log tag is a path, enables auto path sep normalization for windows by default.
+* Assume the log tag is a path, enables auto path sep normalization for Windows by default.
 
 ### v0.2.1
 
