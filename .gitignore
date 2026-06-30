@@ -345,6 +345,7 @@ $RECYCLE.BIN/
 /.playwright-mcp/
 /.sisyphus/
 /.omo/
+/.codegraph/
 /playwright-*.yml
 /task-*-preview.png
 /.reviews/

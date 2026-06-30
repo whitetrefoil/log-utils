@@ -47,6 +47,77 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@colbymchenry/codegraph-darwin-arm64@npm:1.1.6":
+  version: 1.1.6
+  resolution: "@colbymchenry/codegraph-darwin-arm64@npm:1.1.6"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@colbymchenry/codegraph-darwin-x64@npm:1.1.6":
+  version: 1.1.6
+  resolution: "@colbymchenry/codegraph-darwin-x64@npm:1.1.6"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@colbymchenry/codegraph-linux-arm64@npm:1.1.6":
+  version: 1.1.6
+  resolution: "@colbymchenry/codegraph-linux-arm64@npm:1.1.6"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@colbymchenry/codegraph-linux-x64@npm:1.1.6":
+  version: 1.1.6
+  resolution: "@colbymchenry/codegraph-linux-x64@npm:1.1.6"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@colbymchenry/codegraph-win32-arm64@npm:1.1.6":
+  version: 1.1.6
+  resolution: "@colbymchenry/codegraph-win32-arm64@npm:1.1.6"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@colbymchenry/codegraph-win32-x64@npm:1.1.6":
+  version: 1.1.6
+  resolution: "@colbymchenry/codegraph-win32-x64@npm:1.1.6"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@colbymchenry/codegraph@npm:^1.1.6":
+  version: 1.1.6
+  resolution: "@colbymchenry/codegraph@npm:1.1.6"
+  dependencies:
+    "@colbymchenry/codegraph-darwin-arm64": "npm:1.1.6"
+    "@colbymchenry/codegraph-darwin-x64": "npm:1.1.6"
+    "@colbymchenry/codegraph-linux-arm64": "npm:1.1.6"
+    "@colbymchenry/codegraph-linux-x64": "npm:1.1.6"
+    "@colbymchenry/codegraph-win32-arm64": "npm:1.1.6"
+    "@colbymchenry/codegraph-win32-x64": "npm:1.1.6"
+  dependenciesMeta:
+    "@colbymchenry/codegraph-darwin-arm64":
+      optional: true
+    "@colbymchenry/codegraph-darwin-x64":
+      optional: true
+    "@colbymchenry/codegraph-linux-arm64":
+      optional: true
+    "@colbymchenry/codegraph-linux-x64":
+      optional: true
+    "@colbymchenry/codegraph-win32-arm64":
+      optional: true
+    "@colbymchenry/codegraph-win32-x64":
+      optional: true
+  bin:
+    codegraph: npm-shim.js
+  checksum: 10/25e125de2e117d6c6f5f394e769b4de6afc9f156cf00130fc702c7237b52482d265b170c32f481dd2358602904b6e435a6332fb50c743dd61126ba17f131897a
+  languageName: node
+  linkType: hard
+
 "@emnapi/core@npm:1.11.1":
   version: 1.11.1
   resolution: "@emnapi/core@npm:1.11.1"
@@ -862,6 +933,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@whitetrefoil/log-utils@workspace:."
   dependencies:
+    "@colbymchenry/codegraph": "npm:^1.1.6"
     "@eslint-community/eslint-plugin-eslint-comments": "npm:^4.7.2"
     "@eslint/compat": "npm:^2.1.0"
     "@eslint/js": "npm:^10.0.1"
