@@ -37,7 +37,7 @@ export interface Logger {
   /** 基于当前 Logger 的配置创建一个新的 Logger 实例 */
   getLogger: (
     tag: string,
-    config: LoggerConfig,
+    config?: LoggerConfig,
   ) => Logger
 }
 

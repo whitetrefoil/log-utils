@@ -86,9 +86,9 @@ If any check fails, apply Rule 2.
 ## Project Overview
 
 - A small ESM utility library for tagged logging, built on top of `debug` and console output.
-- Public API surface: `getLogger(tag, disableNormalization?)`, `setLevel(level)`, and re-exports from `debug`.
+- Public API surface: `getLogger(tag, config?)`, `colors`/`Colorify`, `logLevels`, `isLogLevel`, `LogLevel`, `Logger`.
 - Entry point: `src/main.ts` compiles to `lib/main.js`; consumers import from `@whitetrefoil/log-utils`.
-- Key boundaries: logger construction (`src/logger.ts`), log-level management (`src/level.ts`), color/format helpers (`src/colors.ts`).
+- Key boundaries: logger construction (`src/logger.ts`), log-level type utilities (`src/level.ts`), color/format helpers (`src/colors.ts`).
 - No bundler: the project is compiled directly by `tsc` into the `lib/` directory.
 - Detailed architecture, API contracts, testing, performance, and security guidance are in `.ai-docs/`.
 

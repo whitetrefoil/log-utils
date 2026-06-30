@@ -9,22 +9,26 @@
 
 ## API Contracts
 
-### `getLogger(tag: string, disableNormalization?: boolean)`
+### `getLogger(tag: string, config?: LoggerConfig)`
 
 - Returns a tagged logger bound to `tag`.
-- By default, treats `tag` as a path and normalizes path separators for Windows compatibility.
-- Pass `disableNormalization = true` to skip normalization (e.g., when the tag is not a path).
-- Returned logger exposes `error`, `warn`, `info`, and `debug` methods.
+- `config` is an optional object with:
+  - `timestamp`: `0 | 1 | 2` (default `1`). `0` disables the timestamp, `1` shows time only (`HH:mm:ss`), `2` shows date + time (`YYYY-MM-DD HH:mm:ss`).
+  - `pathConv`: `boolean` (default `true`). When `true`, the tag is passed through `slash` to normalize path separators to Unix style.
+  - `logFn`: `(...msg: unknown[]) => void` (default `console.log`). Function used to emit formatted messages for `info`, `warn`, and `error`.
+- Returned logger exposes `error`, `warn`, `info`, and `debug` methods. `debug` delegates to the underlying `debug` instance for the tag, so its namespace filtering is controlled by the `DEBUG` environment variable, not by this library.
+- The returned logger also exposes `getLogger(tag, config?)`, which creates a child logger inheriting the parent's `timestamp`, `pathConv`, and `logFn` unless overridden by `config`.
 
-### `setLevel(level: LogLevel)`
+### `LogLevel`, `logLevels`, `isLogLevel`
 
-- Sets the maximum log level globally.
-- Valid levels correspond to the logger methods: `error`, `warn`, `info`, `debug`.
-- Does not affect `debug`-package namespace filtering; it only gates the console output.
+- `LogLevel` is the type union `'info' | 'warn' | 'error'`.
+- `logLevels` is the readonly tuple `['info', 'warn', 'error'] as const`.
+- `isLogLevel(value: unknown): value is LogLevel` is a type guard. It does **not** gate console output; it is exported only as a type utility for consumers that want to validate level strings. The library itself performs no global log-level filtering.
 
-### Re-exports from `debug`
+### `colors` / `Colorify`
 
-- The package re-exports `debug` so consumers can use the same tagged namespace mechanism.
+- `colors` is a `Colorify` instance with color helpers for `timestamp`, `error`, `warn`, `info`, `debug`, and a 6-entry `tag` tuple used for tag color cycling.
+- `Colorify` is the corresponding type, exported for consumers that want to build compatible color objects.
 
 ## ESLint Constraints
 
@@ -34,14 +38,15 @@
 
 ## State Management
 
-- Log level is global mutable state in `src/level.ts`.
-- Keep it minimal; avoid introducing per-logger state that could diverge from the global level.
+- The only mutable state in `src/logger.ts` is the module-level `tagColorIdx` counter used to cycle tag colors across `getLogger` calls.
+- There is no global log-level state; `LogLevel`/`logLevels`/`isLogLevel` in `src/level.ts` are pure type utilities and do not gate output.
+- Keep state minimal; avoid introducing per-logger state that could diverge from the public contract.
 
 ## Component / Module Boundaries
 
 - `main.ts`: only public exports; no implementation details.
-- `logger.ts`: logger construction and method binding.
-- `level.ts`: level constants and global level setter/getter.
+- `logger.ts`: logger construction, prefix formatting, and method binding.
+- `level.ts`: `LogLevel` type, `logLevels` tuple, and `isLogLevel` type guard. No runtime filtering.
 - `colors.ts`: formatting helpers; no business logic.
 
 ## Git Workflow
@@ -52,7 +57,7 @@
 ## Performance Notes (Summary)
 
 - Keep helpers stateless.
-- Avoid eager formatting when a message will be filtered out by the current log level.
+- The library does not perform log-level filtering, so there is no "avoid formatting when filtered" optimization to apply; the only gating is the `debug` package's `DEBUG` namespace matching for the `debug` method.
 
 ## Security Notes (Summary)
 

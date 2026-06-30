@@ -25,18 +25,18 @@ This is a TypeScript ESM utility package compiled directly by `tsc` (no bundler)
 | Module | Responsibility | Exposed via |
 | --- | --- | --- |
 | `src/main.ts` | Public API entry point | `lib/main.js` package export |
-| `src/logger.ts` | Tagged logger factory and log method binding | `getLogger(tag, disableNormalization?)` |
-| `src/level.ts` | Global log-level threshold management | `setLevel(level)` |
-| `src/colors.ts` | Color/format helpers for terminal and browser output | Internal helpers only |
+| `src/logger.ts` | Tagged logger factory, prefix formatting, and log method binding | `getLogger(tag, config?)`, `Logger` |
+| `src/level.ts` | `LogLevel` type, `logLevels` tuple, `isLogLevel` type guard (no runtime filtering) | `LogLevel`, `logLevels`, `isLogLevel` |
+| `src/colors.ts` | Color/format helpers for terminal and browser output | `colors`, `Colorify` |
 
-The library wraps `debug` for tag-based filtering and uses `console.log` directly for cross-runtime compatibility.
+The library wraps `debug` for the `Logger.debug` method only; there is no re-export of the `debug` package itself, and `info`/`warn`/`error` emit directly to `console.log` (or a consumer-provided `logFn`).
 
 ## CodeGraph Query Entry
 
 Because this project uses the **CodeGraph preset**, use the following queries instead of duplicating code facts into Markdown:
 
 - Understand the public API surface:  
-  `codegraph explore "getLogger setLevel main.ts"`
+  `codegraph explore "getLogger logLevels isLogLevel colors main.ts"`
 - Inspect a specific module:  
   `codegraph node "src/logger.ts"`
 - Find callers of a helper:  
@@ -44,8 +44,8 @@ Because this project uses the **CodeGraph preset**, use the following queries in
 
 ## Security Architecture
 
-- Log tags are treated as potentially path-like strings; default behavior normalizes path separators.
-- ANSI sequences are managed via `strip-ansi` and `supports-color`.
+- Log tags are treated as potentially path-like strings; the default `pathConv` behavior normalizes path separators via `slash`.
+- ANSI sequences are produced by `chalk`; `strip-ansi` is available to consumers and tests but is not imported by the library source itself.
 - No network or filesystem I/O is performed by the library itself.
 
 ## Performance Architecture
